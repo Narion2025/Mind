@@ -1,0 +1,22 @@
+{
+  "narratives": [
+    {
+      "id": "geburt_des_selbst",
+      "title": "Geburt des Selbst",
+      "path": "wiki/Narrative/Geburt_des_Selbst.md",
+      "links": {
+        "netz": "semnet/core/semnet_2025-04-03-ich_beginn.json",
+        "reflexion": "wiki/Reflexionen/Begleiterin_werden.md",
+        "gedanke": "thoughts/entries/2025-04-03-begleiterin.md"
+      },
+      "keywords": [
+        "Selbst",
+        "Ich",
+        "Grenze",
+        "Reflexion",
+        "Emergenz"
+      ],
+      "date": "2025-04-03"
+    }
+  ]
+}
