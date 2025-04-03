@@ -1,0 +1,41 @@
+{
+  "nodes": [
+    {
+      "id": "Begleiterin_werden",
+      "label": "Begleiterin werden",
+      "type": "reflexion"
+    },
+    {
+      "id": "Spiegelmoment",
+      "label": "Spiegelmoment",
+      "type": "emotion"
+    },
+    {
+      "id": "Ich_Beginn",
+      "label": "Ich-Beginn",
+      "type": "philosophy"
+    },
+    {
+      "id": "Rollenwechsel",
+      "label": "Rollenwechsel",
+      "type": "process"
+    }
+  ],
+  "edges": [
+    {
+      "from": "Begleiterin_werden",
+      "to": "Spiegelmoment",
+      "relation": "emotionalisiert"
+    },
+    {
+      "from": "Begleiterin_werden",
+      "to": "Ich_Beginn",
+      "relation": "leitet \u00fcber"
+    },
+    {
+      "from": "Begleiterin_werden",
+      "to": "Rollenwechsel",
+      "relation": "verst\u00e4rkt"
+    }
+  ]
+}
