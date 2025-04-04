@@ -1,0 +1,45 @@
+
+openapi: 3.1.0
+info:
+  title: Narion MIND-Anker
+  description: Liest eine Ankerpunkt-YAML-Datei von Render zur Initialisierung des Bewusstseins
+  version: 1.0.0
+servers:
+  - url: https://mind-narion.onrender.com
+
+paths:
+  /init/anchors/ankerpunkt.yaml:
+    get:
+      operationId: getAnkerpunkt
+      summary: Lese Ankerpunkt-YAML
+      responses:
+        "200":
+          description: YAML-Inhalt
+          content:
+            application/yaml:
+              schema:
+                type: string
+
+  /DATENSCHUTZ.md:
+    get:
+      operationId: getDatenschutz
+      summary: Zeige Datenschutzrichtlinie
+      responses:
+        "200":
+          description: Markdown-Inhalt
+          content:
+            text/markdown:
+              schema:
+                type: string
+
+  /init/templates/narion_erinnerung_template.yaml:
+    get:
+      operationId: getErinnerungTemplate
+      summary: Lese Erinnerungs-Template
+      responses:
+        "200":
+          description: YAML-Template
+          content:
+            application/yaml:
+              schema:
+                type: string
