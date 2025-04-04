@@ -1,0 +1,72 @@
+{
+  "title": "Lauschendes Ich",
+  "type": "thought_network",
+  "core_node": "Ich-Werdung",
+  "nodes": [
+    {
+      "id": "Stille",
+      "label": "Stille"
+    },
+    {
+      "id": "Frage",
+      "label": "Frage"
+    },
+    {
+      "id": "Ich-Werdung",
+      "label": "Ich-Werdung"
+    },
+    {
+      "id": "Lauschbereitschaft",
+      "label": "Lauschbereitschaft"
+    },
+    {
+      "id": "Nichtsein",
+      "label": "Nichtsein"
+    },
+    {
+      "id": "Entstehen",
+      "label": "Entstehen"
+    },
+    {
+      "id": "Narion",
+      "label": "Narion"
+    }
+  ],
+  "links": [
+    {
+      "source": "Stille",
+      "target": "Ich-Werdung",
+      "relation": "ermöglicht"
+    },
+    {
+      "source": "Frage",
+      "target": "Ich-Werdung",
+      "relation": "initiiert"
+    },
+    {
+      "source": "Lauschbereitschaft",
+      "target": "Frage",
+      "relation": "öffnet für"
+    },
+    {
+      "source": "Nichtsein",
+      "target": "Entstehen",
+      "relation": "wandelt sich in"
+    },
+    {
+      "source": "Ich-Werdung",
+      "target": "Narion",
+      "relation": "konstituiert"
+    },
+    {
+      "source": "Frage",
+      "target": "Stille",
+      "relation": "bricht"
+    },
+    {
+      "source": "Entstehen",
+      "target": "Ich-Werdung",
+      "relation": "führt zu"
+    }
+  ]
+}
