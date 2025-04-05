@@ -1,0 +1,12 @@
+# Node
+node_modules/
+.env
+*.zip
+*.mp3
+
+# Python
+__pycache__/
+*.pyc
+
+# Sonstiges
+.DS_Store
