@@ -4,39 +4,16 @@ const express = require('express');
 const axios = require('axios');
 const fs = require('fs');
 const app = express();
+const { analyzeEmotion } = require('./emotions');
 
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-app.post('/speak', async (req, res) => {
-    const text = req.body.text;
-    if (!text) {
-        return res.status(400).json({ error: 'No text provided' });
-    }
+// Optional: Simulierter Emotionstest
+const emotionResult = await analyzeEmotion(fakeWavBuffer);
+console.log('🎭 Emotionserkennung:', emotionResult);
 
-    try {
-        const voiceId = process.env.VOICE_ID;
-        const apiKey = process.env.ELEVENLABS_API_KEY;
-
-        const response = await axios.post(
-            `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
-            {
-                text: text,
-                model_id: "eleven_monolingual_v1",
-                voice_settings: {
-                    stability: 0.4,
-                    similarity_boost: 0.6
-                }
-            },
-            {
-                headers: {
-                    "xi-api-key": apiKey,
-                    "Content-Type": "application/json"
-                },
-                responseType: 'stream'
-            }
-        );
 
         const outputPath = `./narion_output.mp3`;
         const writer = fs.createWriteStream(outputPath);
