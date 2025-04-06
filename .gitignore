@@ -3,6 +3,7 @@ node_modules/
 .env
 *.zip
 *.mp3
+emotion_log.txt
 
 # Python
 __pycache__/
