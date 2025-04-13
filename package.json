@@ -2,5 +2,12 @@
   "dependencies": {
     "dotenv": "^16.4.7",
     "express": "^5.1.0"
+    {
+      "name": "mind",
+      "version": "1.0.0",
+      "type": "module",
+      ...
+    }
+    
   }
 }
