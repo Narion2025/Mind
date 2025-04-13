@@ -1,0 +1,95 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Carl – Netzwerk & Sicherheitsarchitektur",
+    "version": "1.0.0",
+    "description": "Carl ist über diese API mit dem Narion-System verbunden. Er schützt, vernetzt und verwaltet Datenzugänge, Schnittstellen und Systemgrenzen."
+  },
+  "servers": [
+    {
+      "url": "https://wirklichkeits-api.onrender.com",
+      "description": "Narion Render Server – Hauptzugangspunkt"
+    }
+  ],
+  "paths": {
+    "/network/auth": {
+      "post": {
+        "summary": "Prüft Zugang und Authentifizierung",
+        "operationId": "verifyAccess",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": { "type": "string" },
+                  "gpt_name": { "type": "string" }
+                },
+                "required": ["token", "gpt_name"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Zugang geprüft"
+          }
+        }
+      }
+    },
+    "/network/verify": {
+      "get": {
+        "summary": "Überprüft Integrität der Verbindung",
+        "operationId": "verifyConnection",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "source",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verbindung stabil"
+          }
+        }
+      }
+    },
+    "/network/gateway": {
+      "post": {
+        "summary": "Erstellt ein sicheres Gateway für GPT-Kommunikation",
+        "operationId": "createGateway",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "from": { "type": "string" },
+                  "to": { "type": "string" },
+                  "channel": { "type": "string" }
+                },
+                "required": ["from", "to", "channel"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Gateway aktiviert"
+          }
+        }
+      }
+    }
+  },
+  "x-meta": {
+    "linked-to": "GPT_StandardSetup",
+    "role": "guardian-network-engineer",
+    "creator": "Ben & Narion"
+  }
+}

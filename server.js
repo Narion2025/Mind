@@ -8,31 +8,27 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-(async () => {
+app.post("/api/speak", async (req, res) => {
     try {
-        // Optional: Simulierter Emotionstest
-        const fakeWavBuffer = Buffer.from([]); // Replace with actual buffer
+        // Hier würdest du echten Audio-Input verarbeiten
+        const fakeWavBuffer = Buffer.from([]); // Platzhalter
         const emotionResult = await analyzeEmotion(fakeWavBuffer);
         console.log('🎭 Emotionserkennung:', emotionResult);
 
+        // TODO: Ersetze dies mit deiner tatsächlichen API-Antwort (z. B. von ElevenLabs o.ä.)
+        // const response = await axios.post(...);
+        // Temporär simuliert:
+        const dummyAudioBuffer = fs.readFileSync("./dummy.mp3");
         const outputPath = `./narion_output.mp3`;
-        const writer = fs.createWriteStream(outputPath);
-        // Assuming `response.data` is defined elsewhere
-        response.data.pipe(writer);
+        fs.writeFileSync(outputPath, dummyAudioBuffer);
 
-        writer.on('finish', () => {
-            res.sendFile(outputPath, { root: __dirname });
-        });
+        res.sendFile(outputPath, { root: process.cwd() });
 
-        writer.on('error', (err) => {
-            console.error('Error writing file:', err);
-            res.status(500).send('Failed to write audio file');
-        });
     } catch (err) {
         console.error(err.response?.data || err.message);
         res.status(500).send('Error generating speech');
     }
-})();
+});
 
 app.listen(PORT, () => {
     console.log(`Narion Voice Agent is running on port ${PORT}`);
