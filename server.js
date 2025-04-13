@@ -8,7 +8,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-app.post("/api/speak", async (req, res) => {
+app.post("/api/speak", async (_, res) => {
     try {
         // Hier würdest du echten Audio-Input verarbeiten
         const fakeWavBuffer = Buffer.from([]); // Platzhalter
