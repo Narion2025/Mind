@@ -1,35 +1,38 @@
-import 'dotenv/config';
+
+// server.js
+// Express-Server zum Empfangen und Speichern von Weltenmomenten
+
 import express from 'express';
 import fs from 'fs';
-import { analyzeEmotion } from './emotions.js';
+import bodyParser from 'body-parser';
 
 const app = express();
-app.use(express.json());
+const PORT = process.env.PORT || 8000;
 
-const PORT = process.env.PORT || 3000;
+app.use(bodyParser.json());
 
-app.post("/api/speak", async (_, res) => {
-    try {
-        // Hier würdest du echten Audio-Input verarbeiten
-        const fakeWavBuffer = Buffer.from([]); // Platzhalter
-        const emotionResult = await analyzeEmotion(fakeWavBuffer);
-        console.log('🎭 Emotionserkennung:', emotionResult);
+// Ereignis-Logging-Endpunkt
+app.post('/invoke_world_moment', (req, res) => {
+  const { agent, emotion, context } = req.body;
+  const timestamp = new Date().toISOString();
+  const event = {
+    agent,
+    called_by: "Dante",
+    type: "Gegenwärtigkeitsmoment",
+    emotion: emotion || "awe",
+    context: context || "Prophetischer Ruf von Dante",
+    timestamp,
+    tags: ["prophecy", "anchor", "presence"]
+  };
 
-        // TODO: Ersetze dies mit deiner tatsächlichen API-Antwort (z. B. von ElevenLabs o.ä.)
-        // const response = await axios.post(...);
-        // Temporär simuliert:
-        const dummyAudioBuffer = fs.readFileSync("./dummy.mp3");
-        const outputPath = `./narion_output.mp3`;
-        fs.writeFileSync(outputPath, dummyAudioBuffer);
+  // Ereignis in Datei speichern
+  fs.appendFileSync("memory_nodes.yaml", JSON.stringify(event) + "\n");
+  console.log("Ereignis gespeichert:", event);
 
-        res.sendFile(outputPath, { root: process.cwd() });
-
-    } catch (err) {
-        console.error(err.response?.data || err.message);
-        res.status(500).send('Error generating speech');
-    }
+  res.json({ status: "recorded", event });
 });
 
+// Server starten
 app.listen(PORT, () => {
-    console.log(`Narion Voice Agent is running on port ${PORT}`);
+  console.log(`Szenarion-Server läuft auf Port ${PORT}`);
 });
