@@ -1,13 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MIND Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-</head>
-<body>
-  <h1>MIND Dashboard – Resonanzraum</h1>
-  <p>Dies ist die finale Version inklusive Daily Stand-Up Raum und Retrospektive Whiteboard.</p>
-</body>
-</html>
+// server.js
+
+const express = require('express');
+const path = require('path');
+
+const app = express();
+const port = 8000;
+
+// 👉 Statische Dateien aus dem "public" Ordner ausliefern (z. B. index.html)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// 👉 API-Route für Avatar-Zustand
+app.get('/avatar/state', (req, res) => {
+  res.json({
+    name: 'Sam',
+    status: 'aktiv',
+    color: 'grün',
+    energy: 82,
+    location: 'Resonanzraum HQ',
+    task: 'Monitoring'
+  });
+});
+
+// 👉 Server starten
+app.listen(port, () => {
+  console.log(`✅ MIND Dashboard läuft auf http://localhost:${port}`);
+});

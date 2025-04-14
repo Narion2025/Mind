@@ -43,8 +43,9 @@ def on_open(ws):
     print("[🎤] Microphone stream started.")
     
     def callback(indata, *_):
-        if status:
-            print(status)
+        # Uncomment and define 'status' if needed, or remove this block
+        # if status:
+        #     print(status)
         audio_bytes = indata.astype(np.int16).tobytes()
         ws.send(audio_bytes, opcode=websocket.ABNF.OPCODE_BINARY)
 
@@ -56,7 +57,6 @@ def start_emotion_stream():
     headers = {
         "Authorization": f"Bearer {HUME_API_KEY}"
     }
-
     ws = websocket.WebSocketApp(
         HUME_WS_URL + "?models=emotions",
         header=headers,
@@ -65,7 +65,6 @@ def start_emotion_stream():
         on_error=on_error,
         on_close=on_close
     )
-
     print("[🧠] Connecting to Hume AI...")
     ws.run_forever()
 

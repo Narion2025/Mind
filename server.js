@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 8000;
 app.use(express.static(publicPath));
 
 // Bei allen GETs: index.html zurückgeben
-app.get("*", (req, res) => {
+app.get("*", (_, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 

@@ -2,8 +2,7 @@ import websocket
 import threading
 import pyaudio
 import json
-import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 # --- CONFIG ---
 HUME_API_KEY = "YOUR_HUME_API_KEY"
@@ -20,7 +19,7 @@ RATE = 16000
 def log_emotion(data):
     with open(LOG_FILE, "a") as f:
         timestamp = datetime.utcnow().isoformat()
-        f.write(f"{timestamp} | {data}\n")
+        timestamp = datetime.now(timezone.utc).isoformat()
         print(f"[LOG] {timestamp}: {data}")
 
 # --- WebSocket Handling ---
