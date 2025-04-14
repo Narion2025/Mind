@@ -17,7 +17,7 @@ BLOCK_SIZE = 1024
 # --- Emotion Logging ---
 def log_emotion(data):
     with open(LOG_FILE, "a") as f:
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(datetime.timezone.utc).isoformat()
         f.write(f"{timestamp} | {data}\n")
         print(f"[LOG] {timestamp}: {data}")
 
@@ -36,13 +36,13 @@ def on_message(ws, message):
 def on_error(ws, error):
     print("[WebSocket Error]:", error)
 
-def on_close(ws, close_status_code, close_msg):
+def on_close(ws, *_):
     print("[WebSocket Closed]")
 
 def on_open(ws):
     print("[🎤] Microphone stream started.")
     
-    def callback(indata, frames, time_info, status):
+    def callback(indata, *_):
         if status:
             print(status)
         audio_bytes = indata.astype(np.int16).tobytes()

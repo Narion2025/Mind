@@ -1,38 +1,25 @@
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 
-// server.js
-// Express-Server zum Empfangen und Speichern von Weltenmomenten
+// __dirname für ES Module herstellen
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-import express from 'express';
-import fs from 'fs';
-import bodyParser from 'body-parser';
+// Absolute Pfadangabe zum Public-Ordner
+const publicPath = path.join(__dirname, "MIND-Dashboard-Bundle", "public");
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-app.use(bodyParser.json());
+// Static Assets bereitstellen
+app.use(express.static(publicPath));
 
-// Ereignis-Logging-Endpunkt
-app.post('/invoke_world_moment', (req, res) => {
-  const { agent, emotion, context } = req.body;
-  const timestamp = new Date().toISOString();
-  const event = {
-    agent,
-    called_by: "Dante",
-    type: "Gegenwärtigkeitsmoment",
-    emotion: emotion || "awe",
-    context: context || "Prophetischer Ruf von Dante",
-    timestamp,
-    tags: ["prophecy", "anchor", "presence"]
-  };
-
-  // Ereignis in Datei speichern
-  fs.appendFileSync("memory_nodes.yaml", JSON.stringify(event) + "\n");
-  console.log("Ereignis gespeichert:", event);
-
-  res.json({ status: "recorded", event });
+// Bei allen GETs: index.html zurückgeben
+app.get("*", (req, res) => {
+  res.sendFile(path.join(publicPath, "index.html"));
 });
 
-// Server starten
 app.listen(PORT, () => {
-  console.log(`Szenarion-Server läuft auf Port ${PORT}`);
+  console.log(`🧠 Dashboard läuft auf http://localhost:${PORT}`);
 });
