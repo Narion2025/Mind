@@ -1,0 +1,23 @@
+
+services:
+  - type: web
+    name: mind-dashboard
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start-all
+    branch: main
+    rootDir: .
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8000
+
+  - type: static
+    name: dashboard-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    branch: main
+    rootDir: .
