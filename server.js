@@ -19,7 +19,6 @@ app.use(express.static(publicPath));
 app.get("*", (_, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
-
-app.listen(PORT, () => {
-  console.log(`🧠 Dashboard läuft auf http://localhost:${PORT}`);
+app.listen(8000, '0.0.0.0', () => {
+  console.log("🧠 Narion MIND Server läuft öffentlich auf Port 8000");
 });
