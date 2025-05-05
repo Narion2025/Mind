@@ -1,0 +1,13 @@
+{
+    "name": "gtp-zora-server",
+    "version": "1.0.0",
+    "description": "Ein YAML-Ankerpunkt-Server für GPT Zora",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "express": "^4.18.4"
+    }
+  }
+  
