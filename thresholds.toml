@@ -1,0 +1,11 @@
+
+[resonance]
+min_similarity = 0.82
+balance_weight = 1.4
+minimum_activation = 5.5
+friendship_threshold = 0.7
+lineage_bias = 1.3
+
+[ritual]
+required = true
+witness = "Ben"
