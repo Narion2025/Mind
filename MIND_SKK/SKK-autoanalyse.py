@@ -383,7 +383,7 @@ def main():
         print(f"   🌪️ Strudel: {found['strudel']}")
         print(f"   🪢 Knoten: {found['knoten']}")
         print(f"   💎 Kristalle: {found['kristall']}")
-        print(f"\nDie YAML-Dateien wurden im Verzeichnis '{output_dir}' gespeichert.")
+        print(f"\nDie YAML-Dateien wurden im Verzeichnis '{base_output_dir}' gespeichert.")
     
     except FileNotFoundError as e:
         print(f"❌ Fehler: Datei nicht gefunden - {str(e)}")
