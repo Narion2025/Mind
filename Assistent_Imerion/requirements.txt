@@ -1,0 +1,4 @@
+# requirements.txt
+openai>=1.13
+pinecone>=3.2
+python-dotenv>=1.0
