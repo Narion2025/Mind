@@ -1,0 +1,26 @@
+uuid: example-strudel-uuid
+created_at: '2025-05-12T12:04:31.090007'
+source: Setup-Skript
+mind_dynamics:
+  mind_type: strudel
+  registry_id: strudel:beispiel_sehnsucht
+  origin_trace: Beispiel
+  matched_pattern: sehne mich
+embedding_ready_text: Ich sehne mich nach mehr Verbindung zu der Tiefe in mir selbst.
+topics:
+- Beispiel
+- Sehnsucht
+- Verbindung
+tags:
+- SKK
+- strudel
+- example
+skk_triplet:
+  strudel:
+    id: strudel:beispiel_sehnsucht
+    name: Sehnsucht nach Tiefe
+    pull_factor_initial: 0.65
+    current_pull_factor: 0.65
+    decay_rate_per_day: 0.015
+    last_activation: '2025-05-12'
+    explosive_potential: false

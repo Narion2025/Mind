@@ -1,0 +1,76 @@
+{
+  "O3_Extra_Markers": {
+    "CX": {
+      "label": "Contradiction",
+      "description": "Selbst- oder Logik-Widerspruch",
+      "sample_patterns": [
+        "aber gleichzeitig",
+        "zuvor sagte ich",
+        "widerspricht sich"
+      ],
+      "weight": 1.0
+    },
+    "IC": {
+      "label": "ImplicitCondition",
+      "description": "Unausgesprochene Voraussetzung / blinder Fleck",
+      "sample_patterns": [
+        "wenn wir alle",
+        "natürlich versteht jeder",
+        "ist doch klar dass"
+      ],
+      "weight": 0.8
+    },
+    "SH": {
+      "label": "Shift",
+      "description": "Plötzlicher Themen- oder Tonwechsel",
+      "sample_patterns": [
+        "apropos",
+        "zurück zum thema",
+        "wo wir gerade von"
+      ],
+      "weight": 1.0
+    },
+    "MT": {
+      "label": "MetaTalk",
+      "description": "Sprechen über das Sprechen",
+      "sample_patterns": [
+        "ich schweife ab",
+        "um das klarzustellen",
+        "lass mich genauer sein"
+      ],
+      "weight": 0.7
+    },
+    "EM_UP": {
+      "label": "EmotionSpikeUp",
+      "description": "Abrupter starker Anstieg in emotionalem Ausdruck",
+      "sample_patterns": [],
+      "weight": 1.0
+    },
+    "EM_DOWN": {
+      "label": "EmotionSpikeDown",
+      "description": "Abrupter Abfall in emotionalem Ausdruck",
+      "sample_patterns": [],
+      "weight": 1.0
+    },
+    "RM": {
+      "label": "RepairMove",
+      "description": "Selbstkorrektur oder Zurückrudern",
+      "sample_patterns": [
+        "anders gesagt",
+        "ich formuliere neu",
+        "was ich meinte war"
+      ],
+      "weight": 0.9
+    },
+    "SI": {
+      "label": "SelfInsight",
+      "description": "Explizites Aha-/Erkenntnismoment",
+      "sample_patterns": [
+        "oh das überrascht mich",
+        "jetzt sehe ich",
+        "mir wird klar"
+      ],
+      "weight": 1.0
+    }
+  }
+}

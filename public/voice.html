@@ -1,0 +1,48 @@
+// VoiceGPT Installer – Direktes Sprachinterface mit GPT-4o
+// Voraussetzungen: Node.js, Browser, Mikrofonzugriff, OpenAI API Key
+
+const express = require('express');
+const { createServer } = require('http');
+const path = require('path');
+const app = express();
+
+// Serve static HTML client
+app.use(express.static(path.join(__dirname, 'public')));
+
+const server = createServer(app);
+
+server.listen(8080, () => {
+  console.log('VoiceGPT läuft unter http://localhost:8080');
+});
+
+/*
+Erstelle im Ordner "public" eine Datei "index.html" mit folgender Struktur:
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VoiceGPT</title>
+</head>
+<body>
+  <h1>🎤 VoiceGPT Live</h1>
+  <button id="start">Start Listening</button>
+  <button id="stop">Stop</button>
+  <div id="log"></div>
+
+  <script>
+    // Sprache → Text → GPT → Antwort → Sprache
+    const log = document.getElementById('log');
+
+    document.getElementById('start').onclick = async () => {
+      log.innerHTML += '<p>🎧 Beginne zu hören…</p>';
+      // Hier: Verbindung zur Speech API + GPT Streaming einbauen
+    };
+
+    document.getElementById('stop').onclick = () => {
+      log.innerHTML += '<p>🛑 Aufnahme gestoppt.</p>';
+      // Aufnahme stoppen
+    };
+  </script>
+</body>
+</html>
+*/

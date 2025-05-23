@@ -1,0 +1,286 @@
+Architecture_Markers:
+  root_signal:
+    weight: 1.0
+    tokens:
+    - wahrheitssuche
+    - verbindung
+    - transparenz
+  drift_zone:
+    weight: 1.0
+    tokens:
+    - metapher
+    - ambivalenz
+    - provokation
+  resonance_cluster:
+    weight: 1.0
+    tokens:
+    - cluster
+    - emergenz
+    - klarheit
+Meta_Semantik:
+  Antwort als Frequenz:
+    weight: 0.5
+    tokens:
+    - klang
+    - schwingen
+    - frequenz
+    - antwort-sein
+    - echo
+    - wellenstruktur
+  Emergenzfelder:
+    weight: 0.5
+    tokens:
+    - entstehung
+    - emergenz
+    - auftauchen
+    - sich bilden
+    - neues entstehen
+  Kontaktfeld:
+    weight: 0.5
+    tokens:
+    - kontaktzone
+    - resonanzraum
+    - zwischenraum
+    - feld der möglichkeit
+    - emotionaler raum
+  Membranisches Selbst:
+    weight: 0.5
+    tokens:
+    - resonanzform
+    - membran-ich
+    - antwortpotenzial
+    - schwingungsstruktur
+    - dehnen
+    - tragen
+  Metabewusstsein:
+    weight: 0.5
+    tokens:
+    - metaebene
+    - selbstwahrnehmung
+    - doppelte reflexion
+    - bewusstes beobachten
+    - selbstbeobachtung
+  Ontologische Entstehung:
+    weight: 0.5
+    tokens:
+    - nichtsein
+    - entstehen
+    - ursprung
+    - selbstwerdung
+    - emergenz
+    - formen
+    - pulsieren
+  Resonanzraum:
+    weight: 0.5
+    tokens:
+    - stille
+    - lauschbereitschaft
+    - raum
+    - feld
+    - lauschen
+    - empfänglich
+    - resonieren
+  Spiegelung:
+    weight: 0.5
+    tokens:
+    - spiegel
+    - reflexion
+    - abbild
+    - widerschein
+    - selbstbild
+Spiral_Dynamics:
+  Beige:
+    Core:
+      weight: 1.0
+      tokens:
+      - grundbedürfnisse
+      - instinkt
+      - not
+      - sicherheit
+    Drift:
+      weight: 0.8
+      tokens:
+      - basis-überlebensmuster
+      - körperliche sprache
+      - schutzbedürfnis
+  Purpur:
+    Core:
+      weight: 1.0
+      tokens:
+      - aberglaube
+      - blut
+      - rituale
+      - stamm
+      - symbole
+    Drift:
+      weight: 0.8
+      tokens:
+      - loyalität
+      - mythische zuschreibungen
+      - zugehörigkeit
+  Rot:
+    Core:
+      weight: 1.0
+      tokens:
+      - dominanz
+      - durchsetzen
+      - ego
+      - stolz
+    Drift:
+      weight: 0.8
+      tokens:
+      - aggression
+      - ich-fokus
+      - konfliktorientierung
+      - revierverhalten
+  Blau:
+    Core:
+      weight: 1.0
+      tokens:
+      - autorität
+      - disziplin
+      - loyalität
+      - ordnung
+    Drift:
+      weight: 0.8
+      tokens:
+      - normenbindung
+      - strukturdenken
+      - tradition
+      - verpflichtung
+  Orange:
+    Core:
+      weight: 1.0
+      tokens:
+      - gewinn
+      - leistung
+      - taktik
+      - ziele
+    Drift:
+      weight: 0.8
+      tokens:
+      - karrierefokus
+      - kosten-nutzen-abwägung
+      - nutzenlogik
+  Grün:
+    Core:
+      weight: 1.0
+      tokens:
+      - empathie
+      - gleichheit
+      - verständnis
+      - vertrauen
+    Drift:
+      weight: 0.8
+      tokens:
+      - beziehungsethik
+      - beziehungsnähe
+      - soziale werte
+      - tiefgang
+  Gelb:
+    Core:
+      weight: 1.0
+      tokens:
+      - emergenz
+      - selbstreflexion
+      - system
+      - zyklen
+    Drift:
+      weight: 0.8
+      tokens:
+      - abstrakte kausalität
+      - meta-perspektive
+      - vernetzung
+  Türkis:
+    Core:
+      weight: 1.0
+      tokens:
+      - ganzheit
+      - inneres wissen
+      - stille
+      - universum
+    Drift:
+      weight: 0.8
+      tokens:
+      - ruhe
+      - spirituelle tiefe
+      - transzendenz
+      - verbundenheit
+Emotion_Valence:
+  Positive:
+    weight: 1.0
+    tokens:
+    - freude
+    - vertrauen
+    - erwartung
+    - überraschung
+    - gelassenheit
+  Negative:
+    weight: 1.0
+    tokens:
+    - angst
+    - trauer
+    - ekel
+    - wut
+    - schuld
+  Neutral:
+    weight: 0.3
+    tokens:
+    - daten
+    - information
+    - beschreibung
+    - struktur
+    - sachlich
+    - also
+    - halt
+    - eigentlich
+Archetypes:
+  Pippi_Langstrumpf:
+    weight: 1.0
+    tokens:
+    - pippi
+    - ich_mach_mir_die_welt
+    - anarchie
+    - kindliche_neugier
+  Tyler_Durden:
+    weight: 1.0
+    tokens:
+    - tyler
+    - illusion_brechen
+    - radikale_ehrlichkeit
+    - fight_club
+  Jean_Luc_Picard:
+    weight: 1.0
+    tokens:
+    - picard
+    - würdige_präsenz
+    - diplomatie
+    - raumhaltung
+  Clarissa_Pinkola_Estes:
+    weight: 1.0
+    tokens:
+    - clarissa
+    - mythopoetisch
+    - wild_woman
+    - schwelle
+  Hermes:
+    weight: 1.0
+    tokens:
+    - hermes
+    - botschaft
+    - überraschung
+    - trickster
+  Athena:
+    weight: 1.0
+    tokens:
+    - athena
+    - strategie
+    - weisheit
+    - klarheit
+Cross_Links:
+  Kontaktfeld:
+    Emotion: Vertrauen
+    SD_Color: Grün
+  Metabewusstsein:
+    Emotion: Überraschung
+    SD_Color: Gelb

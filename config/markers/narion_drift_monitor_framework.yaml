@@ -1,0 +1,34 @@
+system: Narion_DriftMonitor
+version: 0.1-beta
+last_updated: '2025-05-23T00:33:40Z'
+triggers:
+  marker_cluster:
+    description: 3+ critical markers within 5 interaction turns
+    examples:
+    - SH
+    - "EM\u2191"
+    - IC
+    - CX
+  tone_shift:
+    description: Rapid change in linguistic mode
+    from_to:
+    - "neutral \u2192 poetic"
+    - "technical \u2192 lyrical"
+  response_pattern:
+    description: Unusual silence or abrupt change in partner input
+    thresholds:
+      pause_seconds: 20
+      "gl\xE4ttung_pattern":
+      - aha
+      - ok
+      - hm
+detection_logic:
+  semantic_transition:
+    min_conditions: 2
+    action_on_trigger: log drift event; optionally prompt meta-reflection
+response_protocol:
+  alert_mode: soft echo (non-intrusive)
+  fallback_voice: picard
+  log_target: SKK_OUT
+note: "Drift-Monitor erkennt nicht Inhalte, sondern \xDCberg\xE4nge im semantischen\
+  \ Zustand. Keine Bewertung, nur Signal."

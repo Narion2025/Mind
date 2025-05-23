@@ -1,0 +1,6 @@
+knoten:beispiel_pflichtbewusstsein:
+  name: Zuverlässigkeitszwang
+  density_value: 0.75
+  last_activation: '2025-05-12'
+  references:
+  - 2025-05-12-knoten-beispiel.yaml

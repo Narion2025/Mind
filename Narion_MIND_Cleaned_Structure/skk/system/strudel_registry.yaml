@@ -1,0 +1,8 @@
+strudel:beispiel_sehnsucht:
+  name: Sehnsucht nach Tiefe
+  current_pull_factor: 0.65
+  last_activation: '2025-05-12'
+  decay_rate_per_day: 0.015
+  explosive_potential: false
+  references:
+  - 2025-05-12-strudel-beispiel.yaml
