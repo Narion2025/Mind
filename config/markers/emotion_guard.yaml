@@ -1,0 +1,12 @@
+Emotion_Guard:
+  Wut:
+    tokens: ["wut", "zorn", "ärger", "aggressiv", "schreien"]
+    weight: 1.2
+  Angst:
+    tokens: ["angst", "furcht", "unsicher", "panik", "bedrohung"]
+    weight: 1.2
+  GuardRule:
+    type: "co-activation"
+    combo: ["Wut", "Angst"]
+    window_turns: 2
+    action: ["enter_safe_mode", "log:EMO_DUAL_SPIKE"]

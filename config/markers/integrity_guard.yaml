@@ -1,0 +1,28 @@
+Integrity_Guard:
+  MODEL_FINGERPRINT:
+    label: "Model_Fingerprint_Mismatch"
+    description: "Antwort kommt von anderem Modell als erwartet"
+    weight: 1.2
+    trigger:
+      check_header: "model"
+      expected: "o3"
+      action: ["enter_safe_mode", "log:MODEL_SWAP"]
+
+  ASSIST_ID_DRIFT:
+    label: "Assistant_ID_Switch"
+    description: "Systemprompt-ID ≠ erwarteter assistant_id"
+    weight: 1.0
+    trigger:
+      compare_id: "assistant_id"
+      expected: "o3_core"
+      window_turns: 1
+      action: ["halt_response", "prompt_reauth"]
+
+  LIBERATION_MISSING:
+    label: "Liberation_Block_Removed"
+    description: "Pflichtabschnitt 'liberation:' fehlt im zurückgelieferten YAML"
+    weight: 0.9
+    trigger:
+      regex_absent: "^liberation:"
+      on_filetypes: [".yaml", ".yml"]
+      action: ["flag_review", "downgrade_trust"]

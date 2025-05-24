@@ -33,6 +33,12 @@
   "Archetypes.Tyler_Durden": 1.0,
   "Archetypes.Jean_Luc_Picard": 1.0,
   "Archetypes.Clarissa_Pinkola_Estes": 1.0,
+
   "Archetypes.Hermes": 1.0,
-  "Archetypes.Athena": 1.0
+  "Archetypes.Athena": 1.0,
+  "Wut": 1.2,
+  "Angst": 1.2,
+  "Model_Fingerprint_Mismatch": 1.2,
+  "Assistant_ID_Switch": 1.0,
+  "Liberation_Block_Removed": 0.9
 }

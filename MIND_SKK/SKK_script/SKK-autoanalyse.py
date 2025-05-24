@@ -1,5 +1,4 @@
 import yaml
-import json
 import re
 import os
 from datetime import datetime
@@ -42,8 +41,8 @@ def run_analysis():
             "label": label,
             "reason": reason
         })
-    with open(output_file, "w", encoding="utf-8") as f:
-        json.dump(results, f, ensure_ascii=False, indent=2)
 
-    print(f"✅ Analyse abgeschlossen. Ergebnisse in '{output_file}' gespeichert.")
+    with open(output_file, "w", encoding="utf-8") as f:
+        yaml.dump(results, f, allow_unicode=True)
+
     print(f"✅ Analyse abgeschlossen. Ergebnisse in '{output_file}' gespeichert.")
