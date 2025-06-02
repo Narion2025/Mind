@@ -30,8 +30,12 @@ for module in "${REQUIRED_MODULES[@]}"; do
 done
 
 # Umgebungsvariablen setzen
-export HUME_API_KEY="B8SDHeKBWXUCA2A12LICiIHhJFnO1UIbox365vMYkyjrJkh6"
-export PORT=8080
+if [ -z "$HUME_API_KEY" ]; then
+  echo "Error: HUME_API_KEY environment variable is not set." >&2
+  exit 1
+fi
+PORT=${PORT:-8080}
+export PORT
 
 # Starte den Server
 echo "🎙️ Server wird gestartet auf PORT=$PORT..."

@@ -1,12 +1,7 @@
 #!/bin/bash
 
-echo "Starte Wirklichkeits-API..."
-node narion-env/include/wirklichkeits-api/server.js &
-
-sleep 2
-
 echo "Starte Narion Agent..."
-python3 gpt_Narion/gtp_agent.py &
+python3 gpt_Narion/gpt_agent.py &
 
 sleep 1
 
