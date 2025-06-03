@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Starte Wirklichkeits-API..."
-node narion-env/include/wirklichkeits-api/server.js &
+node wirklichkeits-api/server.cjs &
 
 sleep 2
 
