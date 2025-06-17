@@ -7,7 +7,8 @@ marker_loader:
     - o3_extra_markers
     - emotion_guard
     - integrity_guard
-    - o3_text_markers                     # weitere Sets einfach anhängen
+    - o3_text_markers   
+    - residual_stream_markers                   # weitere Sets einfach anhängen
 
 marker_weights_path: "config/marker_weights.json"
 
@@ -69,3 +70,9 @@ expected_model: "o3"                      # wird von Integrity_Guard verglichen
 debug_flags:
   marker_debug: false
   save_raw_context: false
+marker_loader:
+  marker_path: "config/markers/"
+  include_markers:
+    - o3_extra_markers
+    - o3_text_markers
+    - enhanced_sd_markers          # <- NEU hinzufügen

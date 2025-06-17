@@ -1,0 +1,160 @@
+Spiral_Dynamics_Enhanced:
+  Beige:
+    Positive:
+      weight: 1.0
+      tokens: [grundbedürfnisse, instinkt, überleben, körperlich, existenziell, hilflos, schutzlos, verloren]
+      patterns:
+        - "ich brauche.*hilfe"
+        - "weiß nicht mehr weiter"
+        - "völlig überfordert"
+    Negative:
+      weight: -0.8
+      tokens: [resignation, apathie, aufgeben, hoffnungslos, sinnlos, verweigerung]
+      patterns:
+        - "macht alles keinen sinn"
+        - "ist mir egal"
+        - "interessiert mich nicht"
+
+  Purpur:
+    Positive:
+      weight: 1.0
+      tokens: [familie, stamm, tradition, heimat, wurzeln, zugehörigkeit, mystik, aberglaube, ritual, spirituell]
+      patterns:
+        - "schon immer so gemacht"
+        - "unsere tradition"
+        - "gehöre dazu"
+    Negative:
+      weight: -0.8
+      tokens: [isolation, ausschluss, heimatlos, entwurzelt, verloren, orientierungslos]
+      patterns:
+        - "gehöre nirgends dazu"
+        - "fühle mich fremd"
+        - "ohne halt"
+
+  Rot:
+    Positive:
+      weight: 1.0
+      tokens: [ich will, ich kann, ich schaffe, stolz, durchsetzen, dominanz, macht, ego]
+      patterns:
+        - "ich.*ich.*ich"  # Häufung von Ich-Referenzen
+        - "ich bin.*besser"
+        - "alle anderen sind"
+    Negative:
+      weight: -0.8
+      tokens: [unterdrückt, machtlos, unterwerfung, klein, schwach, aggression, zorn, wut]
+      patterns:
+        - "immer die anderen"
+        - "ich darf nicht"
+        - "bin zu schwach"
+
+  Blau:
+    Positive:
+      weight: 1.0
+      tokens: [ordnung, struktur, regel, prozess, system, hierarchie, disziplin, pflicht, richtig, falsch]
+      patterns:
+        - "muss.*geregelt werden"
+        - "gibt klare regeln"
+        - "ordnung schaffen"
+    Negative:
+      weight: -0.8
+      tokens: [chaos, unordnung, regellos, anarchie, starr, dogmatisch, blind gehorsam]
+      patterns:
+        - "alles geht durcheinander"
+        - "keine struktur"
+        - "so steht es geschrieben"
+
+  Orange:
+    Positive:
+      weight: 1.0
+      tokens: [erfolg, leistung, ziel, gewinn, wettbewerb, innovation, fortschritt, karriere, anerkennung]
+      patterns:
+        - "wollen.*erreichen"
+        - "besser.*als.*andere"
+        - "mehr.*schaffen"
+    Negative:
+      weight: -0.8
+      tokens: [gier, rücksichtslos, burn.?out, ausbeutung, konkurrenzkampf, oberflächlich]
+      patterns:
+        - "um jeden preis"
+        - "hauptsache gewinn"
+        - "völlig ausgebrannt"
+
+  Gruen:
+    Positive:
+      weight: 1.0
+      tokens: [gemeinschaft, miteinander, konsens, gleichberechtigung, harmonie, empathie, teilen, kooperation]
+      patterns:
+        - "gemeinsam.*schaffen"
+        - "alle.*stimme"
+        - "miteinander.*sprechen"
+    Negative:
+      weight: -0.8
+      tokens: [harmoniezwang, relativismus, entscheidungslos, konfliktscheu, beliebig]
+      patterns:
+        - "können nicht entscheiden"
+        - "alles ist relativ"
+        - "bloß kein streit"
+
+  Gelb:
+    Positive:
+      weight: 1.0
+      tokens: [system, komplex, perspektive, integration, individuell, entwicklung, lernen, verstehen, paradox]
+      patterns:
+        - "verschiedene.*perspektiven"
+        - "hängt.*zusammen"
+        - "sowohl.*als auch"
+    Negative:
+      weight: -0.8
+      tokens: [überkomplex, analyse.*paralyse, distanziert, kalt, theoretisch, abgehoben]
+      patterns:
+        - "zu kompliziert"
+        - "nur noch theorie"
+        - "verliere mich in details"
+
+  Tuerkis:
+    Positive:
+      weight: 1.0
+      tokens: [ganzheit, nachhaltig, generationen, verantwortung, planet, kosmos, bewusstsein, verbindung]
+      patterns:
+        - "für.*zukunft.*sorgen"
+        - "alles.*verbunden"
+        - "größeres.*ganzes"
+    Negative:
+      weight: -0.8
+      tokens: [weltflucht, esoterik, realitätsfern, weltschmerz, spiritueller bypass]
+      patterns:
+        - "welt.*ist.*schlecht"
+        - "nur.*noch.*meditieren"
+        - "irdisches.*unwichtig"
+
+  Koralle:
+    Positive:
+      weight: 1.0
+      tokens: [einheit, verschmelzung, universal, transzendent, bewusstsein, quantenfeld, alles]
+      patterns:
+        - "alles.*ist.*eins"
+        - "grenzen.*auflösen"
+        - "universelles.*bewusstsein"
+    Negative:
+      weight: -0.8
+      tokens: [nihilismus, sinnlos, leer, auflösung, verlust, existenziell]
+      patterns:
+        - "nichts.*hat.*sinn"
+        - "verliere.*mich"
+        - "alles.*gleichgültig"
+
+# Drift-Erkennung Marker
+Semantic_Drift:
+  Transition_Markers:
+    - patterns:
+        - "plötzlich.*verstehe.*ich"      # Bewusstseinssprung
+        - "auf.*einmal.*wird.*mir.*klar"  # Erkenntnis-Drift
+        - "aber.*dann.*merkte.*ich"       # Wendepunkt
+        - "eigentlich.*geht.*es.*um"      # Meta-Ebenen-Wechsel
+        - "jetzt.*sehe.*ich.*das.*anders" # Perspektivwechsel
+    
+  Resistance_Markers:
+    - patterns:
+        - "will.*das.*nicht.*wahrhaben"   # Widerstand gegen Drift
+        - "das.*kann.*nicht.*sein"        # Realitätsverweigerung
+        - "früher.*war.*alles.*besser"    # Regressionsneigung

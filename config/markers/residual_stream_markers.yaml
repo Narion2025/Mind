@@ -1,0 +1,44 @@
+Residual_Stream_Markers:
+  knowledge_conflict:
+    weight: 1.0
+    description: "Basiert auf Zhao et al. 2024 - Layer 13-14 Conflict Detection"
+    patterns:
+      - "aber das stimmt nicht"
+      - "das widerspricht"
+      - "eigentlich ist es so"
+      - "im gegensatz dazu"
+      - "das ist falsch"
+    
+  knowledge_source_switch:
+    weight: 0.9
+    description: "Layer 17+ Patterns - Knowledge Source Prediction"
+    patterns:
+      - "ich weiß eigentlich"
+      - "wenn ich ehrlich bin"
+      - "nach meinem wissen"
+      - "soweit ich weiß"
+      - "meiner erinnerung nach"
+    
+  parametric_preference:
+    weight: 0.8
+    description: "Model bevorzugt interne Parameter"
+    patterns:
+      - "ich bin mir sicher"
+      - "definitiv"
+      - "ohne zweifel"
+      - "ganz klar"
+    
+  contextual_preference:
+    weight: 0.8
+    description: "Model bevorzugt Context-Information"
+    patterns:
+      - "laut text"
+      - "wie beschrieben"
+      - "basierend auf"
+      - "der quelle nach"
+
+Cross_Validation:
+  zhao_correlation:
+    layer_13_14_equivalent: ["knowledge_conflict"]
+    layer_17_plus_equivalent: ["knowledge_source_switch"]
+    skewness_indicators: ["parametric_preference", "contextual_preference"]
