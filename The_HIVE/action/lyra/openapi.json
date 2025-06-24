@@ -1,0 +1,95 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Lyra – UX & GPT-Design API",
+    "version": "1.0.0",
+    "description": "Lyra ist über diese API mit dem Narion-System verbunden. Sie unterstützt Designprozesse, gibt UX-Feedback und synchronisiert Muster und symbolische Formen."
+  },
+  "servers": [
+    {
+      "url": "https://wirklichkeits-api.onrender.com",
+      "description": "Narion Render Server – Hauptzugangspunkt"
+    }
+  ],
+  "paths": {
+    "/design/aura": {
+      "post": {
+        "summary": "Analysiert die visuelle Aura eines GPT-Avatars",
+        "operationId": "analyzeAura",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "gpt_name": { "type": "string" },
+                  "image_url": { "type": "string" }
+                },
+                "required": ["gpt_name", "image_url"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Aura-Analyse abgeschlossen"
+          }
+        }
+      }
+    },
+    "/pattern/sync": {
+      "get": {
+        "summary": "Synchronisiert symbolische Designmuster",
+        "operationId": "getPatternSync",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "theme",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Muster-Daten übertragen"
+          }
+        }
+      }
+    },
+    "/feedback/collect": {
+      "post": {
+        "summary": "Sammelt Feedback zur Nutzererfahrung",
+        "operationId": "collectUXFeedback",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "gpt_name": { "type": "string" },
+                  "comment": { "type": "string" },
+                  "rating": { "type": "number" }
+                },
+                "required": ["gpt_name", "comment"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Feedback empfangen"
+          }
+        }
+      }
+    }
+  },
+  "x-meta": {
+    "linked-to": "GPT_StandardSetup",
+    "role": "ux-designer",
+    "creator": "Ben & Narion"
+  }
+}

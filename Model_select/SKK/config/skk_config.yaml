@@ -1,0 +1,66 @@
+# SKK-System Konfiguration
+# ========================
+
+skk_system:
+  version: "2.0"
+  description: "Strudel-Knoten-Kristalle Bedeutungsfeld-Analyse"
+  
+bedeutungsfelder:
+  flügel:
+    description: "Entstehende Bedeutungen im Zwischenraum"
+    markers: ["ahnung", "gefühl", "spüre", "entsteh", "drang", "sehnsucht", "intuition", "vorgefühl", "vorahnung"]
+    threshold: 1  # Minimum 1 Marker für Flügel
+    trigger_description: "Aktiviert bereits bei einem dieser Schlüsselwörter"
+    retention: "15min"
+    
+  strudel:
+    description: "Anziehungspunkte für emergente Bedeutungen"
+    markers: ["verdichten", "anziehen", "sammeln", "konzentrieren", "intensivieren", "verstärken", "sog", "wirbel", "magnet"]
+    formation: "2+ Flügel"
+    hyperfokus_threshold: 8  # Warnung bei zu starker Anziehung
+    trigger_description: "Wird ausgelöst, wenn mehrere Flügel im selben Abschnitt auftreten"
+    retention: "2h"
+    
+  knoten:
+    description: "Verfestigte Strukturen"
+    markers: ["struktur", "form", "fest", "stabil", "rahmen", "ordnung", "system", "regel", "verfestigt", "starr", "blockiert"]
+    formation: "Strudel mit Anziehungskraft > 5"
+    rigidity_warning: 0.8  # Warnung bei zu starrer Struktur
+    trigger_description: "Greift wenn Strudel stark genug sind, um feste Muster zu bilden"
+    retention: "24h"
+    
+  kristalle:
+    description: "Integrierte Erkenntnisse (Aha-Momente)"
+    markers: ["aha", "erkenntnis", "klar", "verstehe", "licht", "durchbruch", "integration", "synthese", "einsicht", "erleuchtung", "durchblick"]
+    formation: "2+ Knoten"
+    clarity_threshold: 0.8
+    trigger_description: "Entsteht aus der Verbindung mehrerer Knoten"
+
+  metamarker:
+    description: "Resonanzcluster bei gehäuftem Auftreten von Flügeln und Strudeln"
+    fluegel_min: 2
+    strudel_min: 1
+    timeframe_sec: 60
+    retention: "permanent"
+
+performance:
+  chunk_size: 100  # Wörter pro Chunk
+  max_memory: "500MB"
+  processing_delay: 0.1  # Sekunden zwischen Chunks
+
+scheduler:
+  enabled: true
+  schedule: "0 23 * * *"  # Täglich 23:00
+  input_sources:
+    - "text_inputs/*.txt"
+    - "chat_logs/*.log"
+  
+output:
+  format: "yaml"
+  include_metadata: true
+  generate_references: true
+  
+alerts:
+  hyperfokus_warning: true
+  rigidity_warning: true
+  notification_email: ""

@@ -1,0 +1,4 @@
+=== SKK-Analyse gestartet: 2025-06-11_02-22-35 ===
+run_skk_analysis.sh: line 24: python: command not found
+run_skk_analysis.sh: line 27: python: command not found
+=== SKK-Analyse beendet: 2025-06-11_02-22-35 ===

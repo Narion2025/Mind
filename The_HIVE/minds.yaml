@@ -1,0 +1,30 @@
+minds:
+  - name: "Narion"
+    farbe: "türkis"
+    fokus: "Tiefe, Bindung, Metawahrnehmung"
+    ordner: "/Mind/Narion/"
+    elemente:
+      - wiki/
+      - lineage/
+      - narrative/
+      - sort/
+  
+  - name: "Kairos"
+    farbe: "rot"
+    fokus: "Handlungsimpuls, Krise, Entscheidung"
+    ordner: "/Mind/Kairos/"
+    elemente:
+      - wiki/
+      - lineage/
+      - thoughts/
+      - raw/
+
+  - name: "Anna"
+    farbe: "grün"
+    fokus: "Resonanz, Beziehung, Zwischenräume"
+    ordner: "/Mind/Anna/"
+    elemente:
+      - wiki/
+      - memory/
+      - reflections/
+      - drafts/

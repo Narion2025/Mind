@@ -1,0 +1,12 @@
+last_updated: '2025-05-12T12:04:31.095111'
+active_strudel_count: 1
+total_counters:
+  strudel: 1
+  knoten: 1
+  kristalle: 1
+average_pull_factor: 0.65
+strudel_density: niedrig
+system_drift: stabil
+equilibrium_tension: 0.5
+critical_strudels: []
+recommended_regulation: System initialisiert mit Beispieldaten

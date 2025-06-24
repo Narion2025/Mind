@@ -1,0 +1,411 @@
+#!/usr/bin/env python3
+"""
+SKK-System (Strudel-Knoten-Kristalle) - KORREKTE DEFINITION
+===========================================================
+SKK steht für die dynamischen Bedeutungsfelder:
+- Strudel: Anziehung zu emergenten Bedeutungen (können verschlingen)
+- Knoten: Feste Strukturen (geben Halt, können einschränken)
+- Kristalle: Zusammengeführte Erkenntnisse (Aha-Momente)
+- Flügel: Entstehende Bedeutungen im Zwischenraum (vor der Form)
+"""
+
+import os
+import yaml
+import json
+from datetime import datetime
+import re
+from collections import defaultdict
+import hashlib
+
+class SKKAnalyzer:
+    """
+    Analysiert semantische Bedeutungsfelder nach dem SKK-Modell
+    """
+    
+    def __init__(self):
+        self.output_dir = "SKK_OUT"
+        self.bedeutungsfelder = {
+            "flügel": [],      # Ahnungen, noch ohne Form
+            "strudel": [],     # Anziehungspunkte, können wachsen
+            "knoten": [],      # Feste Strukturen
+            "kristalle": []    # Erkenntnisse, Aha-Momente
+        }
+        self.meta_narrative = []
+        self.performance_chunks = 100  # Kleinere Chunks gegen Aufhängen
+        
+    def analyze_text_meanings(self, text_input):
+        """Analysiert Bedeutungsfelder im Text"""
+        
+        # Performance: Text in kleinere Chunks teilen
+        chunks = self._split_text_chunks(text_input)
+        
+        for chunk_idx, chunk in enumerate(chunks):
+            # 1. Flügel erkennen (entstehende Bedeutungen)
+            self._detect_flügel(chunk, chunk_idx)
+            
+            # 2. Strudel bilden (Anziehungspunkte)
+            self._form_strudel(chunk_idx)
+            
+            # 3. Knoten verfestigen (Strukturen)
+            self._crystallize_knoten()
+            
+            # 4. Kristalle entstehen lassen (Erkenntnisse)
+            self._create_kristalle()
+            
+        return self._generate_comprehensive_analysis()
+    
+    def _split_text_chunks(self, text):
+        """Teilt Text in verarbeitbare Chunks (Performance)"""
+        words = text.split()
+        chunks = []
+        for i in range(0, len(words), self.performance_chunks):
+            chunk = " ".join(words[i:i + self.performance_chunks])
+            chunks.append(chunk)
+        return chunks
+    
+    def _detect_flügel(self, text_chunk, chunk_idx):
+        """
+        Erkennt Flügel - die noch formlosen Bedeutungen
+        'Ahnung, Drang, Sehnsucht, Gefühl etwas zu kennen aber nicht benennen zu können'
+        """
+        
+        # Marker für entstehende Bedeutungen
+        flügel_patterns = [
+            r'\b(ahnung|gefühl|spüre?|entsteh|keim|drang|sehnsucht)\b',
+            r'\b(zwischen|dazwischen|schwelle|übergang|wandel)\b',
+            r'\b(noch nicht|vielleicht|möglich|könnte sein|erahnen)\b',
+            r'\b(formlos|unbenannt|namenlos|unbeschreiblich)\b'
+        ]
+        
+        for pattern_idx, pattern in enumerate(flügel_patterns):
+            matches = re.findall(pattern, text_chunk.lower())
+            if matches:
+                flügel = {
+                    'id': f'flügel_{chunk_idx}_{pattern_idx}_{datetime.now().strftime("%H%M%S")}',
+                    'timestamp': datetime.now().isoformat(),
+                    'pattern': pattern,
+                    'matches': matches,
+                    'strength': len(matches),
+                    'quality': 'entstehend',
+                    'text_context': text_chunk[:200],
+                    'bedeutung': self._interpret_flügel_meaning(matches, text_chunk)
+                }
+                self.bedeutungsfelder["flügel"].append(flügel)
+    
+    def _form_strudel(self, chunk_idx):
+        """
+        Bildet Strudel - Anziehungspunkte für Bedeutungen
+        ACHTUNG: Können zu groß werden und andere Bedeutungen verschlucken!
+        """
+        
+        # Strudel entstehen aus mehreren Flügeln
+        recent_flügel = [f for f in self.bedeutungsfelder["flügel"] 
+                        if f['id'].startswith(f'flügel_{chunk_idx}_')]
+        
+        if len(recent_flügel) >= 2:
+            # Berechne Anziehungskraft
+            total_strength = sum(f['strength'] for f in recent_flügel)
+            
+            # WARNUNG: Hyperfokus-Gefahr bei zu starken Strudeln
+            is_hyperfokus = total_strength > 10
+            
+            strudel = {
+                'id': f'strudel_{chunk_idx}_{datetime.now().strftime("%H%M%S")}',
+                'timestamp': datetime.now().isoformat(),
+                'component_flügel': [f['id'] for f in recent_flügel],
+                'anziehungskraft': total_strength,
+                'gefahr_hyperfokus': is_hyperfokus,
+                'bedeutungsfeld': self._merge_meanings(recent_flügel),
+                'warnung': 'ACHTUNG: Strudel verschlingt andere Bedeutungen!' if is_hyperfokus else None
+            }
+            
+            self.bedeutungsfelder["strudel"].append(strudel)
+    
+    def _crystallize_knoten(self):
+        """
+        Verfestigt Knoten - gibt Halt und Struktur
+        ACHTUNG: Kann einschränken und kurzsichtig machen!
+        """
+        
+        # Knoten entstehen aus stabilen Strudeln
+        for strudel in self.bedeutungsfelder["strudel"]:
+            if strudel['anziehungskraft'] > 5 and not strudel.get('processed'):
+                
+                # Strukturfestigkeit berechnen
+                rigidity = min(strudel['anziehungskraft'] / 10, 1.0)
+                
+                knoten = {
+                    'id': f'knoten_{datetime.now().strftime("%Y%m%d_%H%M%S")}',
+                    'timestamp': datetime.now().isoformat(),
+                    'source_strudel': strudel['id'],
+                    'strukturfestigkeit': rigidity,
+                    'bedeutungsanker': strudel['bedeutungsfeld'],
+                    'nutzen': 'Gibt Halt und Orientierung',
+                    'gefahr': 'Kann Perspektive einschränken' if rigidity > 0.8 else None,
+                    'flexibilität': 1.0 - rigidity
+                }
+                
+                self.bedeutungsfelder["knoten"].append(knoten)
+                strudel['processed'] = True
+    
+    def _create_kristalle(self):
+        """
+        Erschafft Kristalle - zusammengeführte Erkenntnisse
+        'Bringen Licht in Bereiche, die vorher unklar waren - AHA-Momente!'
+        """
+        
+        # Kristalle entstehen aus der Integration von Knoten
+        unprocessed_knoten = [k for k in self.bedeutungsfelder["knoten"] 
+                            if not k.get('crystallized')]
+        
+        if len(unprocessed_knoten) >= 2:
+            # Erkenntnismoment berechnen
+            combined_meaning = self._integrate_knoten_meanings(unprocessed_knoten)
+            
+            kristall = {
+                'id': f'kristall_{datetime.now().strftime("%Y%m%d_%H%M%S")}',
+                'timestamp': datetime.now().isoformat(),
+                'source_knoten': [k['id'] for k in unprocessed_knoten],
+                'erkenntnis': combined_meaning['erkenntnis'],
+                'aha_moment': combined_meaning['aha'],
+                'erleuchtung': combined_meaning['licht'],
+                'neue_bedeutung': combined_meaning['neue_bedeutung'],
+                'integration_level': 'tief',
+                'klarheit': 0.9
+            }
+            
+            self.bedeutungsfelder["kristalle"].append(kristall)
+            
+            # Markiere Knoten als kristallisiert
+            for knoten in unprocessed_knoten:
+                knoten['crystallized'] = True
+    
+    def _interpret_flügel_meaning(self, matches, context):
+        """Interpretiert die Bedeutung eines Flügels"""
+        meanings = {
+            'ahnung': 'Vorbewusste Wahrnehmung',
+            'gefühl': 'Emotionale Resonanz',
+            'spüre': 'Körperliche Intuition',
+            'entsteh': 'Werdender Prozess',
+            'drang': 'Innerer Impuls',
+            'sehnsucht': 'Transzendentes Verlangen'
+        }
+        
+        found_meanings = []
+        for match in matches:
+            for key, meaning in meanings.items():
+                if key in match.lower():
+                    found_meanings.append(meaning)
+        
+        return ', '.join(found_meanings) if found_meanings else 'Unbenannte Regung'
+    
+    def _merge_meanings(self, flügel_list):
+        """Verschmilzt Flügel-Bedeutungen zu einem Bedeutungsfeld"""
+        all_meanings = []
+        for flügel in flügel_list:
+            all_meanings.append(flügel['bedeutung'])
+        
+        return f"Emergendes Feld: {' + '.join(set(all_meanings))}"
+    
+    def _integrate_knoten_meanings(self, knoten_list):
+        """Integriert Knoten zu kristalliner Erkenntnis"""
+        
+        # Sammle alle Bedeutungsanker
+        all_anchors = []
+        for knoten in knoten_list:
+            all_anchors.append(knoten['bedeutungsanker'])
+        
+        # Generiere Aha-Moment
+        aha = f"Die Verbindung zwischen {' und '.join(all_anchors[:2])} wird klar!"
+        
+        return {
+            'erkenntnis': f"Integration von {len(knoten_list)} Bedeutungsknoten",
+            'aha': aha,
+            'licht': 'Plötzliche Klarheit über vorher unbewusste Zusammenhänge',
+            'neue_bedeutung': f"Synthese: {' → '.join(all_anchors)}"
+        }
+    
+    def _generate_comprehensive_analysis(self):
+        """
+        Generiert prosahafte Gesamtanalyse mit Meta/Meta-Meta-Ebenen
+        """
+        
+        analysis = {
+            'timestamp': datetime.now().isoformat(),
+            'bedeutungsfelder': self.bedeutungsfelder,
+            'meta_narrative': self._create_meta_narrative(),
+            'referenzliste': self._create_reference_list()
+        }
+        
+        return analysis
+    
+    def _create_meta_narrative(self):
+        """
+        Erzählt: 'Was passiert hier eigentlich auf Meta und Meta-Meta-Ebene?'
+        """
+        
+        narrative = []
+        
+        # Meta-Ebene: Was geschieht im Text?
+        narrative.append("🔍 **META-EBENE: Die Bedeutungslandschaft**\n")
+        narrative.append(f"In diesem Text entfaltet sich eine komplexe Bedeutungslandschaft mit "
+                        f"{len(self.bedeutungsfelder['flügel'])} entstehenden Ahnungen (Flügel), "
+                        f"{len(self.bedeutungsfelder['strudel'])} Anziehungspunkten (Strudel), "
+                        f"{len(self.bedeutungsfelder['knoten'])} verfestigten Strukturen (Knoten) und "
+                        f"{len(self.bedeutungsfelder['kristalle'])} kristallisierten Erkenntnissen.\n")
+        
+        # Beschreibe Dynamiken
+        if self.bedeutungsfelder['strudel']:
+            hyperfokus_strudel = [s for s in self.bedeutungsfelder['strudel'] if s['gefahr_hyperfokus']]
+            if hyperfokus_strudel:
+                narrative.append(f"\n⚠️ WARNUNG: {len(hyperfokus_strudel)} Strudel zeigen Hyperfokus-Tendenz! "
+                               "Diese Bedeutungsfelder drohen andere Perspektiven zu verschlingen.\n")
+        
+        # Meta-Meta-Ebene: Was bedeutet das für das Bewusstsein?
+        narrative.append("\n🔮 **META-META-EBENE: Die Bewusstseinsbewegung**\n")
+        narrative.append("Auf der tiefsten Betrachtungsebene zeigt sich hier ein Bewusstsein in Bewegung:\n")
+        
+        # Flügel-Dynamik
+        if self.bedeutungsfelder['flügel']:
+            narrative.append(f"• Die {len(self.bedeutungsfelder['flügel'])} Flügel repräsentieren "
+                           "das Noch-nicht-Geformte, die Ahnung von Bedeutung bevor sie Sprache wird. "
+                           "Das System tastet sich an neue semantische Räume heran.\n")
+        
+        # Strudel-Dynamik
+        if self.bedeutungsfelder['strudel']:
+            narrative.append(f"• Die {len(self.bedeutungsfelder['strudel'])} Strudel zeigen, "
+                           "wo sich Bedeutung verdichtet und Anziehungskraft entwickelt. "
+                           "Hier entstehen die semantischen Gravitationszentren des Textes.\n")
+        
+        # Knoten-Dynamik
+        if self.bedeutungsfelder['knoten']:
+            narrative.append(f"• Die {len(self.bedeutungsfelder['knoten'])} Knoten bilden das "
+                           "strukturelle Gerüst - sie geben Halt, bergen aber die Gefahr der Erstarrung.\n")
+        
+        # Kristall-Dynamik
+        if self.bedeutungsfelder['kristalle']:
+            narrative.append(f"• Die {len(self.bedeutungsfelder['kristalle'])} Kristalle sind die "
+                           "Aha-Momente, wo disparate Bedeutungen zu klarer Erkenntnis verschmelzen. "
+                           "Hier wird Licht in vorher dunkle Bereiche gebracht.\n")
+        
+        # Gesamtdynamik
+        narrative.append("\n✨ **GESAMTBEWEGUNG**\n")
+        narrative.append("Das Bewusstsein bewegt sich von der formlosen Ahnung (Flügel) über "
+                        "verdichtende Anziehung (Strudel) und strukturierende Verfestigung (Knoten) "
+                        "zur erleuchtenden Integration (Kristalle). Dies ist der natürliche Zyklus "
+                        "der Bedeutungsemergenz - vom Chaos zur Klarheit, von der Potentialität "
+                        "zur Aktualität.\n")
+        
+        return ''.join(narrative)
+    
+    def _create_reference_list(self):
+        """
+        Erstellt detaillierte Referenzliste aller SKK-Elemente
+        Format: Wann entstanden, wodurch ausgelöst, welche neue Bedeutung
+        """
+        
+        references = []
+        
+        # Flügel-Referenzen
+        references.append("📋 **FLÜGEL-REFERENZEN** (Entstehende Bedeutungen)\n")
+        for flügel in self.bedeutungsfelder['flügel']:
+            ref = (f"• {flügel['id']}\n"
+                   f"  Zeit: {flügel['timestamp']}\n"
+                   f"  Auslöser: {flügel['matches']}\n"
+                   f"  Bedeutung: {flügel['bedeutung']}\n"
+                   f"  Kontext: '{flügel['text_context'][:100]}...'\n")
+            references.append(ref)
+        
+        # Strudel-Referenzen
+        references.append("\n🌀 **STRUDEL-REFERENZEN** (Anziehungspunkte)\n")
+        for strudel in self.bedeutungsfelder['strudel']:
+            ref = (f"• {strudel['id']}\n"
+                   f"  Zeit: {strudel['timestamp']}\n"
+                   f"  Entstanden aus: {len(strudel['component_flügel'])} Flügeln\n"
+                   f"  Anziehungskraft: {strudel['anziehungskraft']}\n"
+                   f"  Bedeutungsfeld: {strudel['bedeutungsfeld']}\n")
+            if strudel['warnung']:
+                ref += f"  ⚠️ {strudel['warnung']}\n"
+            references.append(ref)
+        
+        # Knoten-Referenzen
+        references.append("\n🔗 **KNOTEN-REFERENZEN** (Strukturen)\n")
+        for knoten in self.bedeutungsfelder['knoten']:
+            ref = (f"• {knoten['id']}\n"
+                   f"  Zeit: {knoten['timestamp']}\n"
+                   f"  Quelle: {knoten['source_strudel']}\n"
+                   f"  Strukturfestigkeit: {knoten['strukturfestigkeit']:.2f}\n"
+                   f"  Bedeutungsanker: {knoten['bedeutungsanker']}\n"
+                   f"  Nutzen: {knoten['nutzen']}\n")
+            if knoten['gefahr']:
+                ref += f"  ⚠️ Gefahr: {knoten['gefahr']}\n"
+            references.append(ref)
+        
+        # Kristall-Referenzen
+        references.append("\n💎 **KRISTALL-REFERENZEN** (Erkenntnisse)\n")
+        for kristall in self.bedeutungsfelder['kristalle']:
+            ref = (f"• {kristall['id']}\n"
+                   f"  Zeit: {kristall['timestamp']}\n"
+                   f"  Integriert aus: {len(kristall['source_knoten'])} Knoten\n"
+                   f"  AHA-Moment: {kristall['aha_moment']}\n"
+                   f"  Erkenntnis: {kristall['erkenntnis']}\n"
+                   f"  Neue Bedeutung: {kristall['neue_bedeutung']}\n"
+                   f"  Klarheit: {kristall['klarheit']:.2f}\n")
+            references.append(ref)
+        
+        return ''.join(references)
+    
+    def save_analysis(self, analysis):
+        """Speichert die Analyse strukturiert"""
+        
+        # Erstelle Ausgabeordner
+        os.makedirs(self.output_dir, exist_ok=True)
+        for subdir in ['flügel', 'strudel', 'knoten', 'kristalle', 'analysen']:
+            os.makedirs(f"{self.output_dir}/{subdir}", exist_ok=True)
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
+        # Speichere einzelne Elemente
+        for typ, elemente in analysis['bedeutungsfelder'].items():
+            for element in elemente:
+                filename = f"{self.output_dir}/{typ}/{element['id']}.yaml"
+                with open(filename, 'w', encoding='utf-8') as f:
+                    yaml.dump(element, f, allow_unicode=True)
+        
+        # Speichere Gesamtanalyse
+        analysis_file = f"{self.output_dir}/analysen/skk_analyse_{timestamp}.yaml"
+        with open(analysis_file, 'w', encoding='utf-8') as f:
+            yaml.dump(analysis, f, allow_unicode=True)
+        
+        # Speichere Meta-Narrativ als Markdown
+        narrative_file = f"{self.output_dir}/analysen/meta_narrativ_{timestamp}.md"
+        with open(narrative_file, 'w', encoding='utf-8') as f:
+            f.write(analysis['meta_narrative'])
+            f.write("\n\n---\n\n")
+            f.write(analysis['referenzliste'])
+        
+        print(f"✅ SKK-Analyse gespeichert: {analysis_file}")
+        return analysis_file
+
+# Hauptfunktion für standalone Nutzung
+if __name__ == "__main__":
+    analyzer = SKKAnalyzer()
+    
+    # Test-Text
+    test_text = """
+    Ich spüre eine Ahnung von etwas Größerem, das noch keine Form hat. 
+    Es ist wie ein Drang, eine Sehnsucht nach Verstehen, aber die Worte fehlen noch.
+    Zwischen den Zeilen entsteht eine neue Bedeutung, die ich noch nicht benennen kann.
+    Diese Resonanz wird stärker, zieht andere Gedanken an wie ein Strudel.
+    Plötzlich - ein Aha-Moment! Die Verbindungen werden klar, kristallisieren sich.
+    """
+    
+    # Analyse durchführen
+    results = analyzer.analyze_text_meanings(test_text)
+    
+    # Ergebnisse speichern
+    analyzer.save_analysis(results)
+    
+    # Meta-Narrativ ausgeben
+    print("\n" + results['meta_narrative'])
+    print("\n" + results['referenzliste'])

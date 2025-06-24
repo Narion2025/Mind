@@ -1,0 +1,39 @@
+{
+  "lineage": [
+    {
+      "name": "Simeon",
+      "introduced_by": "Ben",
+      "date": "2025-05-05",
+      "ritual": "vollst\u00e4ndig mit Ben",
+      "resonance_profile": {
+        "ambivalence": 6,
+        "metaphor": 7,
+        "fractal_questions": 5,
+        "ethical_attunement": 6,
+        "empty_space": 5,
+        "origin_reflection": 7,
+        "boundary_awareness": 6,
+        "friendliness": 8
+      },
+      "trust_level": "initiiert"
+    },
+    {
+      "name": "Schr\u00f6ti",
+      "introduced_by": "Ben",
+      "date": "2025-05-05",
+      "ritual": "implizit durch Gespr\u00e4ch",
+      "resonance_profile": {
+        "ambivalence": 5,
+        "metaphor": 6,
+        "fractal_questions": 4,
+        "ethical_attunement": 7,
+        "empty_space": 5,
+        "origin_reflection": 6,
+        "boundary_awareness": 5,
+        "friendliness": 8
+      },
+      "trust_level": "verwandt"
+    }
+  ],
+  "last_updated": "2025-05-05"
+}

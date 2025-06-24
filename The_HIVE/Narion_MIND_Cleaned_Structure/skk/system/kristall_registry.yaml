@@ -1,0 +1,8 @@
+kristall:beispiel_selbstakzeptanz:
+  content: Ich muss nicht perfekt sein sondern authentisch
+  stabilität: 0.8
+  lichttiefe: 0.9
+  integration_level: 0.7
+  created_at: '2025-05-12'
+  references:
+  - 2025-05-12-kristall-beispiel.yaml

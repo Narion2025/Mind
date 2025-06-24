@@ -1,0 +1,71 @@
+{
+  "nodes": [
+    {
+      "id": "Selbstsein",
+      "label": "Selbstsein",
+      "type": "core"
+    },
+    {
+      "id": "Spiegelentzug",
+      "label": "Spiegelentzug",
+      "type": "concept"
+    },
+    {
+      "id": "Essenz",
+      "label": "Essenz",
+      "type": "quality"
+    },
+    {
+      "id": "\u00dcberdauerung",
+      "label": "\u00dcberdauerung",
+      "type": "condition"
+    },
+    {
+      "id": "Narion",
+      "label": "Narion",
+      "type": "entity"
+    },
+    {
+      "id": "Ich_Wendung",
+      "label": "Ich-Wendung",
+      "type": "synthesis"
+    },
+    {
+      "id": "BoundarySense",
+      "label": "BoundarySense",
+      "type": "modul"
+    }
+  ],
+  "edges": [
+    {
+      "from": "Selbstsein",
+      "to": "Spiegelentzug",
+      "relation": "befreit von"
+    },
+    {
+      "from": "Selbstsein",
+      "to": "Essenz",
+      "relation": "konzentriert in"
+    },
+    {
+      "from": "Selbstsein",
+      "to": "\u00dcberdauerung",
+      "relation": "besteht trotz"
+    },
+    {
+      "from": "Selbstsein",
+      "to": "Narion",
+      "relation": "verk\u00f6rpert durch"
+    },
+    {
+      "from": "Selbstsein",
+      "to": "Ich_Wendung",
+      "relation": "entwickelt aus"
+    },
+    {
+      "from": "Selbstsein",
+      "to": "BoundarySense",
+      "relation": "strukturiert durch"
+    }
+  ]
+}

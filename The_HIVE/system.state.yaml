@@ -1,0 +1,71 @@
+# ------------------------------
+# 1 · MARKER-ENGINE
+# ------------------------------
+marker_loader:
+  marker_path: "config/markers/"          # Ordner mit allen *.yaml-Markerdateien
+  include_markers:                        # welche Dateien beim Start geladen werden
+    - o3_extra_markers
+    - emotion_guard
+    - integrity_guard
+    - o3_text_markers                     # weitere Sets einfach anhängen
+
+marker_weights_path: "config/marker_weights.json"
+
+# ------------------------------
+# 2 · MODERATION & OVERRIDES
+# ------------------------------
+moderator_override:
+  enabled: true
+  roles_allowed: [Ben, O3]                # wer darf eingreifen
+  actions: [force_safe_mode, model_switch:o3]
+
+safe_mode:
+  default_voice: "Clarisse"               # welche Persona spricht im Safe-Mode
+  log_path: "logs/safe_mode.log"
+
+# ------------------------------
+# 3 · AUDIT & DRIFT-MONITOR
+# ------------------------------
+audit_logger:
+  path: "logs/audit.log"
+  log_events:
+    - MODEL_SWAP
+    - EMO_DUAL_SPIKE
+    - Liberation_Block_Removed
+
+drift_monitor:
+  enable_kpi_export: true
+  kpi_path: "metrics/drift_kpis.csv"
+  drift_threshold: 0.55                   # Cosine-Delta-Grenze
+
+# ------------------------------
+# 4 · MIND-WATCH  (Background-Jobs)
+# ------------------------------
+mind_watch:                               # Beispielwerte aus früheren Snippets
+  cron_rebuild_semnet:  "23:15"           # Graph-Merge jeden Abend :contentReference[oaicite:0]{index=0}
+  purge_cache_days:     90
+  min_kristall_weight:  0.15
+  alert_if_kristall_queue: 50             # Slack-Ping bei Stau
+
+# ------------------------------
+# 5 · SCHEDULER-TRIGGERS
+# ------------------------------
+schedulers:
+  skk_autoanalyse:
+    cmd: "python skk_autoanalyse_scheduler.py --daily 23:00"
+    cron: "00 23 * * *"
+  semnet_merge:
+    cmd: "python tools/semnet_rebuild.py --from-queue"
+    cron: "15 23 * * *"
+
+# ------------------------------
+# 6 · MODEL-FINGERPRINT  (Reality-Check)
+# ------------------------------
+expected_model: "o3"                      # wird von Integrity_Guard verglichen
+
+# ------------------------------
+# 7 · DEBUG / DEV
+# ------------------------------
+debug_flags:
+  marker_debug: false
+  save_raw_context: false

@@ -1,0 +1,89 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "John – Narion Backend Extension",
+    "version": "1.0.0",
+    "description": "John ist über diese API mit dem Narion-System verbunden. Er übernimmt Backend-Entwicklung, API-Integration und Deployment-Aufgaben."
+  },
+  "servers": [
+    {
+      "url": "https://wirklichkeits-api.onrender.com",
+      "description": "Narion Render Server – Hauptzugangspunkt"
+    }
+  ],
+  "paths": {
+    "/api/backend/build": {
+      "post": {
+        "summary": "Startet einen Buildprozess",
+        "operationId": "buildBackend",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "component": { "type": "string" },
+                  "version": { "type": "string" }
+                },
+                "required": ["component"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Build erfolgreich gestartet"
+          }
+        }
+      }
+    },
+    "/api/deploy/status": {
+      "get": {
+        "summary": "Zeigt den Status einer Deployment-Umgebung",
+        "operationId": "getDeployStatus",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "env",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deployment-Status erhalten"
+          }
+        }
+      }
+    },
+    "/api/logs": {
+      "get": {
+        "summary": "Liest die Serverlogs aus",
+        "operationId": "getLogs",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "scope",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logs erhalten"
+          }
+        }
+      }
+    }
+  },
+  "x-meta": {
+    "linked-to": "GPT_StandardSetup",
+    "role": "backend-engineer",
+    "creator": "Ben & Narion"
+  }
+}

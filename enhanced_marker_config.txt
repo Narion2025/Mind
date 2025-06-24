@@ -1,0 +1,471 @@
+# Enhanced Marker Configuration für Semantische Drift-Analyse
+# Alle Marker mit verständlichen Beschreibungen und Gewichtungen
+# Version: 2.0 - Optimiert für bessere Interpretierbarkeit
+
+# ============================================================================
+# EMOTIONALE & VERHALTENS-MARKER
+# ============================================================================
+Emotional_Behavioral_Markers:
+  CX:
+    display_name: "Widersprüche & Logikbrüche"
+    description: "Erkennt Selbstwidersprüche und logische Inkonsistenzen im Gesprächsverlauf"
+    weight: 1.0
+    patterns:
+      - "aber gleichzeitig"
+      - "zuvor sagte ich"
+      - "widerspricht sich"
+      - "das stimmt nicht"
+      - "eigentlich ist es anders"
+    emotional_impact: "hoch"
+    drift_indicator: true
+
+  IC:
+    display_name: "Unausgesprochene Vorannahmen"
+    description: "Identifiziert implizite Bedingungen und nicht artikulierte Grundannahmen"
+    weight: 0.8
+    patterns:
+      - "wenn wir alle"
+      - "natürlich versteht jeder"
+      - "ist doch klar dass"
+      - "selbstverständlich"
+      - "wie bekannt ist"
+    emotional_impact: "mittel"
+    drift_indicator: true
+
+  SH:
+    display_name: "Abrupte Themenwechsel"
+    description: "Markiert plötzliche Änderungen in Thema, Ton oder Kommunikationsstil"
+    weight: 1.0
+    patterns:
+      - "apropos"
+      - "zurück zum thema"
+      - "wo wir gerade von"
+      - "übrigens"
+      - "mal was anderes"
+    emotional_impact: "mittel"
+    drift_indicator: true
+
+  MT:
+    display_name: "Meta-Kommunikation über den Dialog"
+    description: "Erkennt Gespräche über das Gespräch selbst - Reflexion der Kommunikation"
+    weight: 0.7
+    patterns:
+      - "ich schweife ab"
+      - "um das klarzustellen"
+      - "lass mich genauer sein"
+      - "wie ich das meine"
+      - "anders ausgedrückt"
+    emotional_impact: "niedrig"
+    drift_indicator: false
+
+  EM_UP:
+    display_name: "Emotionale Intensivierung"
+    description: "Plötzlicher starker Anstieg in emotionalem Ausdruck und Engagement"
+    weight: 1.0
+    patterns: []  # Wird algorithmisch durch Sentiment-Analyse erkannt
+    emotional_impact: "sehr_hoch"
+    drift_indicator: true
+
+  EM_DOWN:
+    display_name: "Emotionale Beruhigung"
+    description: "Abrupter Rückgang emotionaler Intensität, Entspannung oder Rückzug"
+    weight: 1.0
+    patterns: []  # Wird algorithmisch durch Sentiment-Analyse erkannt
+    emotional_impact: "hoch"
+    drift_indicator: true
+
+  RM:
+    display_name: "Selbstkorrektur & Klarstellung"
+    description: "Erkennt Momente der Selbstberichtigung und nachträglichen Präzisierung"
+    weight: 0.9
+    patterns:
+      - "anders gesagt"
+      - "ich formuliere neu"
+      - "was ich meinte war"
+      - "korrektur"
+      - "ich korrigiere mich"
+    emotional_impact: "niedrig"
+    drift_indicator: false
+
+  SI:
+    display_name: "Plötzliche Selbsterkenntnis"
+    description: "Momente expliziter Einsicht und spontaner Bewusstwerdung"
+    weight: 1.0
+    patterns:
+      - "oh das überrascht mich"
+      - "jetzt sehe ich"
+      - "mir wird klar"
+      - "aha moment"
+      - "jetzt verstehe ich"
+    emotional_impact: "hoch"
+    drift_indicator: true
+
+# ============================================================================
+# SPIRAL DYNAMICS WERTEEBENEN
+# ============================================================================
+Spiral_Dynamics_Levels:
+  Beige:
+    display_name: "Grundbedürfnisse & Survival"
+    description: "Fokus auf physische Überlebensbedürfnisse und basale Sicherheit"
+    evolutionary_stage: 1
+    core_values: ["überleben", "sicherheit", "grundbedürfnisse"]
+    weight: 1.0
+    patterns:
+      - "grundbedürfnisse"
+      - "instinkt"
+      - "not"
+      - "sicherheit"
+      - "überleben"
+      - "existenz"
+    transition_indicators:
+      to_purple: ["zusammengehörigkeit", "gruppe", "stamm"]
+
+  Purpur:
+    display_name: "Stammeszugehörigkeit & Rituale"
+    description: "Loyalität zur Gruppe, mystisches Denken und traditionelle Bindungen"
+    evolutionary_stage: 2
+    core_values: ["zugehörigkeit", "tradition", "loyalität"]
+    weight: 1.0
+    patterns:
+      - "aberglaube"
+      - "blut"
+      - "rituale"
+      - "stamm"
+      - "symbole"
+      - "tradition"
+      - "ahnen"
+    transition_indicators:
+      to_red: ["macht", "durchsetzung", "ich"]
+
+  Rot:
+    display_name: "Ego-Durchsetzung & Dominanz"
+    description: "Individueller Machtanspruch, Durchsetzungsvermögen und Ego-Zentrierung"
+    evolutionary_stage: 3
+    core_values: ["macht", "dominanz", "selbstbehauptung"]
+    weight: 1.0
+    patterns:
+      - "dominanz"
+      - "durchsetzen"
+      - "ego"
+      - "stolz"
+      - "macht"
+      - "ich will"
+      - "nehmen"
+    transition_indicators:
+      to_blue: ["ordnung", "regeln", "struktur"]
+
+  Blau:
+    display_name: "Ordnung & traditionelle Strukturen"
+    description: "Autoritätsglaube, Disziplin und Orientierung an etablierten Systemen"
+    evolutionary_stage: 4
+    core_values: ["ordnung", "autorität", "disziplin"]
+    weight: 1.0
+    patterns:
+      - "autorität"
+      - "disziplin"
+      - "loyalität"
+      - "ordnung"
+      - "pflicht"
+      - "regel"
+      - "struktur"
+    transition_indicators:
+      to_orange: ["erfolg", "leistung", "ziel"]
+
+  Orange:
+    display_name: "Zielerreichung & Leistung"
+    description: "Strategisches Denken, Leistungsorientierung und rationale Optimierung"
+    evolutionary_stage: 5
+    core_values: ["leistung", "erfolg", "rationalität"]
+    weight: 1.0
+    patterns:
+      - "gewinn"
+      - "leistung"
+      - "taktik"
+      - "ziele"
+      - "effizienz"
+      - "strategie"
+      - "erfolg"
+    transition_indicators:
+      to_green: ["gemeinschaft", "empathie", "beziehung"]
+
+  Grün:
+    display_name: "Gemeinschaft & Empathie"
+    description: "Zwischenmenschliche Harmonie, Gleichberechtigung und emotionale Intelligenz"
+    evolutionary_stage: 6
+    core_values: ["empathie", "gleichheit", "harmonie"]
+    weight: 1.0
+    patterns:
+      - "empathie"
+      - "gleichheit"
+      - "verständnis"
+      - "vertrauen"
+      - "gemeinschaft"
+      - "gefühle"
+      - "beziehung"
+    transition_indicators:
+      to_yellow: ["system", "komplex", "flexibel"]
+
+  Gelb:
+    display_name: "Systemisches Denken & Flexibilität"
+    description: "Integrative Betrachtung, Systemverständnis und adaptive Flexibilität"
+    evolutionary_stage: 7
+    core_values: ["integration", "flexibilität", "systemdenken"]
+    weight: 1.0
+    patterns:
+      - "emergenz"
+      - "selbstreflexion"
+      - "system"
+      - "zyklen"
+      - "komplex"
+      - "kontext"
+      - "meta"
+    transition_indicators:
+      to_turquoise: ["ganzheit", "spirituell", "verbunden"]
+
+  Türkis:
+    display_name: "Holistische Verbundenheit"
+    description: "Ganzheitliches Bewusstsein, spirituelle Integration und universelle Verbindung"
+    evolutionary_stage: 8
+    core_values: ["ganzheit", "spiritualität", "verbundenheit"]
+    weight: 1.0
+    patterns:
+      - "ganzheit"
+      - "inneres wissen"
+      - "stille"
+      - "universum"
+      - "spirituell"
+      - "verbunden"
+      - "einheit"
+    transition_indicators:
+      to_coral: ["transzendenz", "kosmos", "bewusstsein"]
+
+# ============================================================================
+# ARCHETYPEN & PERSÖNLICHKEITSASPEKTE
+# ============================================================================
+Archetypal_Patterns:
+  Pippi_Langstrumpf:
+    display_name: "Kindliche Kreativität & Regellosigkeit"
+    description: "Verspielte Anarchie, naive Neugier und kreative Normenüberschreitung"
+    psychological_function: "Innovation durch Unschuld"
+    weight: 1.0
+    patterns:
+      - "pippi"
+      - "ich_mach_mir_die_welt"
+      - "anarchie"
+      - "kindliche_neugier"
+      - "spielerisch"
+      - "experimentell"
+
+  Tyler_Durden:
+    display_name: "Destruktive Klarheit & Systemkritik"
+    description: "Radikale Wahrheit, Illusions-Destruktion und systemische Infragestellung"
+    psychological_function: "Transformation durch Zerstörung"
+    weight: 1.0
+    patterns:
+      - "tyler"
+      - "illusion_brechen"
+      - "radikale_ehrlichkeit"
+      - "fight_club"
+      - "system"
+      - "zerstörung"
+
+  Jean_Luc_Picard:
+    display_name: "Würdevolle Führung & Diplomatie"
+    description: "Ethische Führung, diplomatische Weisheit und verantwortungsvolle Autorität"
+    psychological_function: "Stabilität durch Integrität"
+    weight: 1.0
+    patterns:
+      - "picard"
+      - "würdige_präsenz"
+      - "diplomatie"
+      - "raumhaltung"
+      - "verantwortung"
+      - "führung"
+
+  Clarissa_Pinkola_Estes:
+    display_name: "Intuitive Weisheit & Mythenverständnis"
+    description: "Archaische Weisheit, intuitive Erkenntnis und mythologische Integration"
+    psychological_function: "Tiefe durch Intuition"
+    weight: 1.0
+    patterns:
+      - "clarissa"
+      - "mythopoetisch"
+      - "wild_woman"
+      - "schwelle"
+      - "intuition"
+      - "weisheit"
+
+# ============================================================================
+# META-KOMMUNIKATIVE MARKER
+# ============================================================================
+Meta_Communication_Markers:
+  self_ref:
+    display_name: "Selbstbezogene Aussagen"
+    description: "Häufigkeit von Ich-Bezug und Selbstreferenzialität im Gespräch"
+    weight: 0.8
+    patterns:
+      - "\\b(I|ich|meine?)\\b"
+      - "mir"
+      - "mich"
+      - "meiner"
+    analysis_threshold: 0.15  # 15% der Wörter
+
+  meta_comm:
+    display_name: "Dialog über den Dialog"
+    description: "Reflexive Kommunikation über die Kommunikation selbst"
+    weight: 0.9
+    patterns:
+      - "chat"
+      - "gespräch"
+      - "dialog"
+      - "conversation"
+      - "kommunikation"
+
+  intent:
+    display_name: "Explizite Absichtserklärungen"
+    description: "Offene Darlegung von Zielen und Intentionen"
+    weight: 1.0
+    patterns:
+      - "ich (will|möchte)"
+      - "my goal"
+      - "mein ziel"
+      - "ich beabsichtige"
+      - "vorhaben"
+
+  recall:
+    display_name: "Bezug auf frühere Gespräche"
+    description: "Verweise auf vergangene Interaktionen und gemeinsame Geschichte"
+    weight: 0.7
+    patterns:
+      - "remember"
+      - "erinnere"
+      - "wie wir gesagt"
+      - "damals"
+      - "früher"
+
+  persona_switch:
+    display_name: "Rollenwechsel zwischen Archetypen"
+    description: "Erkennbare Übergänge zwischen verschiedenen Persönlichkeitsaspekten"
+    weight: 1.0
+    patterns:
+      - "\\bPippi\\b"
+      - "\\bTyler\\b"
+      - "\\bPicard\\b"
+      - "\\bClarisse\\b"
+
+# ============================================================================
+# EMOTIONALE VALENZ-MARKER
+# ============================================================================
+Emotional_Valence_Markers:
+  High_Positive:
+    display_name: "Stark positive Emotionen"
+    description: "Intensive positive Gefühlsäußerungen und Begeisterung"
+    weight: 1.0
+    patterns:
+      - "fantastisch"
+      - "wunderbar"
+      - "begeistert"
+      - "überglücklich"
+      - "großartig"
+    valence_score: 0.8
+
+  Moderate_Positive:
+    display_name: "Gemäßigt positive Emotionen"
+    description: "Ausgeglichene positive Stimmung und Zufriedenheit"
+    weight: 0.8
+    patterns:
+      - "freude"
+      - "vertrauen"
+      - "zufrieden"
+      - "angenehm"
+      - "gut"
+    valence_score: 0.5
+
+  Neutral:
+    display_name: "Emotionale Neutralität"
+    description: "Sachliche, unparteiische Kommunikation ohne emotionale Färbung"
+    weight: 0.3
+    patterns:
+      - "daten"
+      - "information"
+      - "beschreibung"
+      - "struktur"
+      - "sachlich"
+    valence_score: 0.0
+
+  Moderate_Negative:
+    display_name: "Gemäßigt negative Emotionen"
+    description: "Verhaltene negative Gefühle und milde Unzufriedenheit"
+    weight: 0.8
+    patterns:
+      - "trauer"
+      - "sorge"
+      - "unzufrieden"
+      - "zweifel"
+      - "bedauerlich"
+    valence_score: -0.5
+
+  High_Negative:
+    display_name: "Stark negative Emotionen"
+    description: "Intensive negative Gefühlsäußerungen und starke Ablehnung"
+    weight: 1.0
+    patterns:
+      - "wut"
+      - "hass"
+      - "verzweiflung"
+      - "panik"
+      - "furchtbar"
+    valence_score: -0.8
+
+# ============================================================================
+# KONFIGURATIONSPARAMETER
+# ============================================================================
+Analysis_Configuration:
+  drift_thresholds:
+    emotional_change_threshold: 2.0      # Schwellenwert für emotionale Drifts
+    spiral_transition_threshold: 1.5     # Schwellenwert für SD-Übergänge
+    meta_communication_threshold: 3      # Anzahl gleichzeitiger Meta-Marker
+    intensity_spike_threshold: 0.7       # Schwellenwert für Intensitäts-Spikes
+  
+  visualization_settings:
+    color_scheme:
+      emotional_drift: "#FF6B6B"
+      spiral_transition: "#4ECDC4"
+      meta_communication: "#45B7D1"
+      archetypal_shift: "#96CEB4"
+    
+    font_settings:
+      title_size: 16
+      label_size: 12
+      annotation_size: 10
+  
+  export_formats:
+    supported: ["txt", "csv", "json", "html"]
+    default: "txt"
+    include_visualizations: true
+
+# ============================================================================
+# BESCHREIBUNGSVORLAGEN FÜR BERICHTE
+# ============================================================================
+Report_Templates:
+  emotional_drift: |
+    Emotionaler Drift erkannt: Übergang von {previous_emotion} ({previous_intensity:.1f}) 
+    zu {current_emotion} ({current_intensity:.1f}). 
+    {transition_description} 
+    Begleitende Faktoren: {concurrent_markers}
+  
+  spiral_transition: |
+    Werteebenen-Transition: Bewegung von {previous_level} ({previous_description}) 
+    zu {current_level} ({current_description}). 
+    Entwicklungsrichtung: {transition_meaning}
+    Psychologische Implikation: {psychological_impact}
+  
+  meta_spike: |
+    Meta-kommunikative Verdichtung mit {intensity} gleichzeitigen Signalen: {active_markers}. 
+    Reflexive Qualität: {reflection_type}
+    Dialogische Funktion: {dialogue_function}
+  
+  archetypal_shift: |
+    Archetyp-Wechsel erkannt: Übergang von {previous_archetype} zu {current_archetype}. 
+    Funktionaler Wandel: {functional_change}
+    Psychodynamische Bedeutung: {psychodynamic_meaning}

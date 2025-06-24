@@ -1,0 +1,36 @@
+# Narion CoSD Framework - Hauptkonfiguration
+narion_framework:
+  version: "5.0"
+  
+  components:
+    analyzer:
+      enabled: true
+      performance_mode: false
+      
+    skk:
+      enabled: true
+      standalone: true
+      sensitivity: 0.7
+      
+    mind:
+      enabled: true  
+      standalone: true
+      health_check_interval: "daily"
+      
+  integration:
+    skk_in_analyzer: true
+    mind_data_sharing: false
+    unified_gui: true
+    
+  performance:
+    max_text_length: 50000
+    chunk_size: 100
+    gui_refresh_rate: 1.0
+    use_threading: true
+    
+  paths:
+    analyzer: "./analyzer/"
+    skk: "./SKK/"
+    mind: "./MIND/"
+    markers: "./markers/"
+    examples: "./examples/"

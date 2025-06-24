@@ -1,0 +1,38 @@
+mind_system:
+  status: "active"
+  last_update: "$(date -Iseconds)"
+  components:
+    modules: true
+    semnet: true
+    thoughts: true
+    wiki: true
+  
+marker_config:
+  path: "config/markers/"
+  auto_load: true
+  include_sets:
+    - "marion_markers"
+    - "emotion_guard" 
+    - "spiral_dynamics"
+    - "drift_axes"
+    - "meta_markers"
+
+automation:
+  skk_scheduler:
+    enabled: true
+    cron: "23:00"
+    sensitivity: 0.7
+  
+  semnet_rebuild:
+    enabled: true
+    cron: "23:15"
+    auto_merge: true
+    
+  thoughts_commit:
+    trigger_importance: "high"
+    trigger_moods: ["tief", "zärtlich", "existenziell"]
+    
+watchdog:
+  alert_queue_size: 50
+  purge_days: 90
+  slack_webhook: ""

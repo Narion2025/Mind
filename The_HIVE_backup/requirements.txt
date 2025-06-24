@@ -1,0 +1,7 @@
+openai>=1.13
+pinecone-client>=3.0
+python-dotenv>=1.0
+pyyaml
+jsonlines
+watchdog
+rich

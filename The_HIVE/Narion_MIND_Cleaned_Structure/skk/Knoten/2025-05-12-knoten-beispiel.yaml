@@ -1,0 +1,26 @@
+uuid: example-knoten-uuid
+created_at: '2025-05-12T12:04:31.090254'
+source: Setup-Skript
+mind_dynamics:
+  mind_type: knoten
+  registry_id: knoten:beispiel_pflichtbewusstsein
+  origin_trace: Beispiel
+  matched_pattern: muss immer
+embedding_ready_text: Ich muss immer zuverlässig sein, sonst bin ich wertlos.
+topics:
+- Beispiel
+- Pflicht
+- Zuverlässigkeit
+tags:
+- SKK
+- knoten
+- example
+skk_triplet:
+  knoten:
+    id: knoten:beispiel_pflichtbewusstsein
+    name: Zuverlässigkeitszwang
+    density_value: 0.75
+    origin_trace: Beispiel
+    systemic_effects:
+    - Druck
+    - Selbstabwertung bei Fehlern

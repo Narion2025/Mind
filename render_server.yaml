@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: mind-agent
+    env: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 mind_bootstrap.py
+    autoDeploy: true
+
+envVars:
+  - key: MIND_ANCHOR
+    value: /mnt/data/mind_root

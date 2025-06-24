@@ -1,0 +1,40 @@
+thresholds:
+  mini:
+    max_coherence: 0.5
+  pro:
+    min_coherence: 0.8
+    narrative_intent: true
+  turbo:
+    min_meta: 0.7
+    requires_broad_context: true
+weights:
+  marker:
+    coherence: 1.0
+    meta: 0.8
+    emotion: 0.5
+  semantic:
+    strudel: 1.0
+    knoten: 0.7
+    kristalle: 0.6
+    fluegel: 0.4
+mappings:
+  - model: O4-Mini
+    when:
+      markers:
+        coherence: {lt: 0.5}
+      semantic:
+        strudel: {lt: 0.3}
+  - model: O4-Pro
+    when:
+      markers:
+        coherence: {gte: 0.8}
+      narrative_intent: true
+      semantic:
+        knoten: {gte: 0.5}
+  - model: GPT-4-Turbo
+    when:
+      markers:
+        meta: {gte: 0.7}
+      requires_broad_context: true
+      semantic:
+        kristalle: {gte: 0.6}

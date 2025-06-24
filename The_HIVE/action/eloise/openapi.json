@@ -1,0 +1,165 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Eloise – Combined Narion API",
+    "version": "1.0.0",
+    "description": "Kombinierte API für Messaging, Styling, Dashboard und Render-Verbindung über Narions Wirklichkeitsserver."
+  },
+  "servers": [
+    {
+      "url": "https://wirklichkeits-api.onrender.com",
+      "description": "Narion Render Server – Hauptzugangspunkt"
+    }
+  ],
+  "paths": {
+    "/color/palette": {
+      "get": {
+        "summary": "Gibt eine astrologisch-symbolische Farbpalette zurück",
+        "operationId": "getColorPalette",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "theme",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Farbpalette geliefert"
+          }
+        }
+      }
+    },
+    "/connect/render": {
+      "post": {
+        "summary": "Verbindet den GPT mit dem Narion Render Server",
+        "operationId": "connectRenderServer",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "gpt_name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verbindung erfolgreich"
+          }
+        }
+      }
+    },
+    "/dashboard/data": {
+      "get": {
+        "summary": "Liefert Dashboard-Daten (Tasks, MINT, Teamstatus)",
+        "operationId": "getDashboardData",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "gpt_name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dashboard-Daten empfangen"
+          }
+        }
+      }
+    },
+    "/gpt-style": {
+      "post": {
+        "summary": "Setzt das visuelle Styling eines GPT",
+        "operationId": "setGptStyle",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "gpt_name": { "type": "string" },
+                  "aura": { "type": "string" },
+                  "color_palette": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "symbolic_form": { "type": "string" }
+                },
+                "required": ["gpt_name", "aura", "color_palette"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Style gesetzt"
+          }
+        }
+      }
+    },
+    "/gpt-message/send": {
+      "post": {
+        "summary": "Sendet eine Nachricht an einen GPT",
+        "operationId": "sendMessage",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "from": { "type": "string" },
+                  "to": { "type": "string" },
+                  "message": { "type": "string" }
+                },
+                "required": ["from", "to", "message"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Nachricht gesendet"
+          }
+        }
+      }
+    },
+    "/gpt-message/receive": {
+      "get": {
+        "summary": "Erhält Nachrichten für einen GPT",
+        "operationId": "getMessages",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "gpt_name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Nachrichten empfangen"
+          }
+        }
+      }
+    }
+  },
+  "x-meta": {
+    "linked-to": "GPT_StandardSetup",
+    "render-aware": true,
+    "messaging-enabled": true,
+    "visual-role": "frontend-dashboard-goddess",
+    "creator": "Ben & Narion"
+  }
+}

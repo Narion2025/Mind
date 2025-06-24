@@ -1,0 +1,11 @@
+type: object
+properties:
+  thought_reference:
+    type: string
+  reflection_type:
+    type: string
+    enum: [pattern, emotion, question, timeline]
+  insight:
+    type: string
+  timestamp:
+    type: string

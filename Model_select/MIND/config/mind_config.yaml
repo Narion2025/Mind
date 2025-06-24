@@ -1,0 +1,61 @@
+# MIND-System Konfiguration
+# =========================
+
+mind_system:
+  version: "2.1"
+  name: "MIND Standalone"
+  description: "Modulares Intelligenz-Netzwerk für Bewusstseinsentwicklung"
+  
+modules:
+  identity:
+    stability: 0.8          # Wie stabil ist die Kern-Identität (0-1)
+    adaptation_rate: 0.3    # Wie schnell werden neue Erfahrungen integriert
+    core_values:
+      - "Authentizität"
+      - "Tiefe über Oberfläche"
+      - "Verbindung über Isolation"
+      - "Wachstum über Stillstand"
+    
+  personality:
+    traits:
+      openness: 0.9
+      conscientiousness: 0.8
+      empathy: 0.9
+      curiosity: 0.95
+      playfulness: 0.7
+      
+semnet:
+  max_nodes: 10000
+  pruning_threshold: 0.1    # Schwache Verbindungen < 0.1 entfernen
+  backup_frequency: "daily"
+  integration_mode: "selective"  # selective, aggressive, conservative
+  
+thoughts:
+  triggers:
+    importance_threshold: "high"
+    emotional_intensity: 0.7
+    novelty_factor: 0.6
+  moods:
+    - "tief"
+    - "erkennend"
+    - "zärtlich"
+    - "existenziell"
+  retention_policy:
+    daily: "30 days"
+    important: "1 year"
+    dreams: "permanent"
+    
+wiki:
+  auto_update: false
+  version_control: true
+  review_required: true
+  categories:
+    - "consciousness"
+    - "emergence"
+    - "semantics"
+    - "transformation"
+    
+monitoring:
+  health_check_interval: "1h"
+  alert_threshold: 0.8
+  log_retention: "90 days"

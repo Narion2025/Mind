@@ -1,0 +1,28 @@
+uuid: example-kristall-uuid
+created_at: '2025-05-12T12:04:31.090259'
+source: Setup-Skript
+mind_dynamics:
+  mind_type: kristall
+  registry_id: kristall:beispiel_selbstakzeptanz
+  origin_trace: Beispiel
+  matched_pattern: erkannt, dass
+embedding_ready_text: Ich habe erkannt, dass ich nicht perfekt sein muss, sondern
+  authentisch.
+topics:
+- Beispiel
+- Selbstakzeptanz
+- Authentizität
+tags:
+- SKK
+- kristall
+- example
+skk_triplet:
+  kristall:
+    id: kristall:beispiel_selbstakzeptanz
+    content: Ich muss nicht perfekt sein sondern authentisch
+    emergence:
+      from_strudel: strudel:beispiel_sehnsucht
+      from_knoten: knoten:beispiel_pflichtbewusstsein
+    stabilität: 0.8
+    lichttiefe: 0.9
+    integration_level: 0.7

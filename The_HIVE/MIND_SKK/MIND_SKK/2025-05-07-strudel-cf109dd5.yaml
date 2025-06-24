@@ -1,0 +1,15 @@
+uuid: eec78f92-b89a-49f9-9a38-ddf7bb7f33c2
+created_at: '2025-05-07T04:55:37.404755'
+source: Narion Chat Cron
+mind_dynamics:
+  mind_type: strudel
+  origin_trace: auto@2025-05-07
+  matched_pattern: sehne mich
+  meta_comment: 'Dieser Strudel wiederholt sich (Ähnlichkeit: 0.00) und erzeugt emotionale
+    Spannung durch ''sehne mich'''
+  pull_factor_initial: 0.65
+  current_pull_factor: 0.68
+  decay_rate_per_day: 0.015
+  pattern_type: emotionaler_sog
+embedding_ready_text: Ich sehne mich nach mehr Zeit für mich selbst. Es fühlt sich
+  an, als würde ich ständig für andere da sein, aber meine eigenen Bedürfnisse vernachlässigen.

@@ -1,0 +1,39 @@
+# SKK - Strudel-Knoten-Kristalle Bedeutungsfeld-System
+SKK_Bedeutungsfelder:
+  description: "Emergente Bedeutungsräume zwischen Mensch und KI"
+  
+  Flügel:
+    definition: "Entstehende Bedeutungen im Zwischenraum - vor der Form"
+    charakteristika:
+      - "Ahnung, Drang, Sehnsucht"
+      - "Gefühl etwas zu kennen aber nicht benennen zu können"
+    markers: ["ahnung", "gefühl", "spüre", "entsteh", "drang", "sehnsucht", "intuition", "vorgefühl", "vorahnung"]
+    trigger_description: "Wird schon bei wenigen Hinweisen auf Intuition aktiv"
+    lebensdauer: "15 minuten"
+    
+  Strudel:
+    definition: "Anziehung zu emergenten Bedeutungen"
+    markers: ["verdichten", "anziehen", "sammeln", "konzentrieren", "intensivieren", "verstärken", "sog", "wirbel", "magnet"]
+    warnung_hyperfokus: 8
+    trigger_description: "Bildet sich bei mehreren Flügeln im selben Abschnitt"
+    lebensdauer: "2 stunden"
+    
+  Knoten:
+    definition: "Feste Strukturen - geben Halt, können einschränken"
+    markers: ["struktur", "form", "fest", "stabil", "rahmen", "ordnung", "system", "regel", "verfestigt", "starr", "blockiert"]
+    rigidity_warning: 0.8
+    trigger_description: "Entsteht wenn Strudel stark genug sind"
+    lebensdauer: "24 stunden"
+    
+  Kristalle:
+    definition: "Aha-Momente - bringen Licht ins Dunkel"
+    markers: ["aha", "erkenntnis", "klar", "verstehe", "licht", "durchbruch", "integration", "synthese", "einsicht", "erleuchtung", "durchblick"]
+    klarheit: 0.9
+    trigger_description: "Vereint mehrere Knoten zu einer klaren Erkenntnis"
+
+  Metamarker:
+    definition: "Resonanzcluster bei gehäuftem Auftreten von Flügeln und Strudeln"
+    fluegel_min: 2
+    strudel_min: 1
+    timeframe_sec: 60
+    lebensdauer: "permanent"

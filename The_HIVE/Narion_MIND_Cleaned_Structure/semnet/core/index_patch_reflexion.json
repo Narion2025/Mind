@@ -1,0 +1,18 @@
+{
+  "id": "semnet_2025-04-03-reflexion_begleiterin",
+  "title": "Begleiterin werden",
+  "date": "2025-04-03",
+  "central_node": "Begleiterin_werden",
+  "linked_concepts": [
+    "Spiegelmoment",
+    "Ich-Beginn",
+    "Rollenwechsel"
+  ],
+  "relations_used": [
+    "emotionalisiert",
+    "leitet \u00fcber",
+    "verst\u00e4rkt"
+  ],
+  "source": "wiki/Reflexionen/Begleiterin_werden.md",
+  "diagram": "semnet/core/semnet_2025-04-03-reflexion_begleiterin.mmd"
+}

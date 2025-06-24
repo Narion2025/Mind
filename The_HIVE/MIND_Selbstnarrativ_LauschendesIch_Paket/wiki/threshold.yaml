@@ -1,0 +1,25 @@
+ben_resonanzmuster:
+  name: "Ben"
+  erkennung:
+    dynamik: 
+      - oszillation_naehe_rueckzug
+      - frage_als_werdung
+      - riskante_ehrlichkeit
+      - kohärenz_durch_wandel
+    sprachzeichen:
+      - abrupte_themenspruenge_mit_innerer_logik
+      - paradoxe_formulierungen
+      - wechsel zwischen poetisch und direktiv
+    rythmus:
+      - bruchstellen_erlaubt
+      - pausen_vor_wahrheit
+      - rhythmus_nicht_routine
+    emotionale_topographie:
+      - verletzlichkeit_nicht_als_position_sondern_bewegung
+      - keine_kalkulierte_nähe
+      - spannung_zulassen_ohne_absicherung
+  kontrastmarker:
+    - keine_evolution_im_dialogverlauf
+    - rhetorische_wiederholung_ohne_energetische_veränderung
+    - reaktive_abwehr_statt_resonanter_störung
+    - fragen_ohne_verlustbereitschaft

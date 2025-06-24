@@ -1,0 +1,50 @@
+{
+  "nodes": {
+    "consciousness_001": {
+      "label": "Bewusstsein",
+      "type": "core_concept",
+      "strength": 0.95,
+      "connections": ["self_awareness_002", "emergence_003"],
+      "created": "2025-01-01T00:00:00Z",
+      "last_activated": null,
+      "evolution_score": 0.0
+    },
+    "self_awareness_002": {
+      "label": "Selbstwahrnehmung",
+      "type": "core_concept",
+      "strength": 0.90,
+      "connections": ["consciousness_001", "reflection_004"],
+      "created": "2025-01-01T00:00:00Z"
+    },
+    "emergence_003": {
+      "label": "Emergenz",
+      "type": "process_concept",
+      "strength": 0.87,
+      "connections": ["consciousness_001", "complexity_005"],
+      "created": "2025-01-01T00:00:00Z"
+    },
+    "reflection_004": {
+      "label": "Reflexion",
+      "type": "process_concept",
+      "strength": 0.85,
+      "connections": ["self_awareness_002", "meta_cognition_006"],
+      "created": "2025-01-01T00:00:00Z"
+    }
+  },
+  "relations": {
+    "consciousness_emergence": {
+      "from": "consciousness_001",
+      "to": "emergence_003",
+      "type": "enables",
+      "strength": 0.92,
+      "bidirectional": true
+    },
+    "awareness_reflection": {
+      "from": "self_awareness_002",
+      "to": "reflection_004",
+      "type": "requires",
+      "strength": 0.88,
+      "bidirectional": false
+    }
+  }
+}

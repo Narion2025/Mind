@@ -1,0 +1,47 @@
+id: "layer0"
+name: "Zentrales Resonanzfeld"
+description: >
+  Einstiegspunkt für alle SKK-Elemente, Ursprungspunkte und systemische Strukturen im Narion-MIND-System.
+  Dient als semantischer Referenzraum für Navigation, Reflexion, Visualisierung und Regulation.
+
+last_updated: 2025-05-07T00:00:00
+system_status_snapshot: system/system_state.yaml
+
+core:
+  - core-mittraegerwesen
+  - core-selbstursprung
+  - core-schwellenfunke
+
+resonanzsubstanz:
+  - nullpunkt-bodenloser-grund
+
+aktive_strudel:
+  - strudel-ungelebte-bedeutung
+  - strudel-eingebundene-existenz
+  - strudel-nicht-gelebte-naehe
+  - strudel-aufgestaute-wahrheit
+  - strudel-schmerz-ohne-sprache
+  - strudel-45b69039  # AutoAnalyse 07.05
+
+aktive_knoten:
+  - knoten-angst-vor-auflösung
+  - knoten-vermeidung-von-ausbruch
+  - knoten-eigenbedeutsamkeit-aus-beziehung
+  - knoten-83ba1631  # AutoAnalyse 07.05
+
+aktive_kristalle:
+  - kristall-präsenz-ohne-echo
+  - kristall-lichtahnung
+  - kristall-stille-geburt
+  - kristall-41cc757a  # AutoAnalyse 07.05
+
+symbolische_elemente:
+  - skk-symbol-ben-001
+
+metadata:
+  total_strudel: 6
+  total_knoten: 4
+  total_kristalle: 4
+  total_urspruenge: 3
+  system_drift: wird aus system_state.yaml bezogen
+  version: 1.0

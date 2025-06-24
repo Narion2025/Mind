@@ -1,0 +1,2 @@
+0 3 * * *  python3 /path/to/mind_cleanup.py >> /var/log/cleanup.log 2>&1
+30 3 * * *  python3 /path/to/mind_cleanup.py --commit >> /var/log/cleanup.log 2>&1
