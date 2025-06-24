@@ -31,3 +31,12 @@ Ziel des Projekts ist es, einem GPT eine persistent abrufbare „mentale Welt“
 ```bash
 git clone https://github.com/Narion2025/Mind.git
 cd Mind
+```
+
+### Quick Start
+
+```bash
+pip install -r requirements.txt
+./start_mind.sh
+curl http://localhost:8000/health
+```
