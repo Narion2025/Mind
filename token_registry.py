@@ -1,37 +1,37 @@
 from __future__ import annotations
-
 import os
 from pathlib import Path
-from typing import Optional
-from shutil import copy2
+from typing import Optional, List
 
 try:
-    from dotenv import load_dotenv
-except ModuleNotFoundError:  # pragma: no cover - optional dependency
+    from dotenv import load_dotenv  # type: ignore
+except ModuleNotFoundError:  # pragma: no cover
     def load_dotenv(path=None):  # type: ignore
-        return None
+        if path and Path(path).exists():
+            for line in Path(path).read_text().splitlines():
+                if "=" in line and not line.startswith("#"):
+                    k, v = line.split("=", 1)
+                    os.environ.setdefault(k, v)
 
+PROJECT_ROOT = Path(__file__).resolve().parent
+ENV_KEYS = [
+    "MINDSWARM_GITHUB_TOKEN",
+    "OPENAI_API_KEY",
+    "HUMEAI_API_KEY",
+    "ELEVENLABS_API_KEY",
+]
 
-SECRETS_DIR = Path(__file__).resolve().parent / "MIND_SECRETS"
-DEFAULT_ENV = SECRETS_DIR / "env_default.env"
-
+def generate_env_files(agent_names: List[str]) -> None:
+    lines = [f"{k}={os.getenv(k,'')}" for k in ENV_KEYS]
+    content = "\n".join(lines)
+    for name in agent_names:
+        (PROJECT_ROOT / f".env.{name}").write_text(content)
 
 def load_agent_env(agent_name: str) -> None:
-    """Load environment variables for a given agent.
-
-    If the agent specific .env file does not exist but the default
-    template does, the template is copied automatically.
-    """
-    env_file = SECRETS_DIR / f"env_{agent_name}.env"
-
-    if not env_file.exists() and DEFAULT_ENV.exists():
-        env_file.parent.mkdir(parents=True, exist_ok=True)
-        copy2(DEFAULT_ENV, env_file)
-
+    generate_env_files([agent_name])
+    env_file = PROJECT_ROOT / f".env.{agent_name}"
     if env_file.exists():
         load_dotenv(env_file)
 
-
 def get_env_var(key: str) -> Optional[str]:
-    """Return the value of an environment variable if set."""
     return os.getenv(key)
