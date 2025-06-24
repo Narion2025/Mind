@@ -5,7 +5,11 @@ from pathlib import Path
 from typing import Optional
 from shutil import copy2
 
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+except ModuleNotFoundError:  # pragma: no cover - optional dependency
+    def load_dotenv(path=None):  # type: ignore
+        return None
 
 
 SECRETS_DIR = Path(__file__).resolve().parent / "MIND_SECRETS"

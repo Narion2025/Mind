@@ -1,0 +1,27 @@
+---
+type: object
+required:
+  - uuid
+  - created_at
+  - author
+  - source
+  - context
+  - mood
+  - topics
+properties:
+  uuid:
+    type: string
+  created_at:
+    type: string
+  author:
+    type: string
+  source:
+    type: string
+  context:
+    type: string
+  mood:
+    type: string
+  topics:
+    type: array
+    items:
+      type: string

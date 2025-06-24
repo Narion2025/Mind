@@ -21,7 +21,7 @@ python3 MIND_CI_Validation/scripts/validate_thoughts.py &
 sleep 1
 
 echo "Starte Voice Server..."
-./start_voice_server.sh &
+./start_voice.sh &
 
 echo "Initialisiere Ankerpunkt..."
 echo "Pfad: init/anchors/ankerpunkt.yaml (nur manuell oder über Interface verwendbar)"
