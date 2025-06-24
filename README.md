@@ -40,3 +40,30 @@ pip install -r requirements.txt
 ./start_mind.sh
 curl http://localhost:8000/health
 ```
+
+## 🔊 Voice Pipeline
+
+Installiere Node.js-Abhängigkeiten und starte anschließend den Voice-Server:
+
+```bash
+npm install
+yarn install >/dev/null 2>&1 || true
+./start_voice.sh
+```
+
+### Umgebungsvariablen
+
+- `HUMEAI_API_KEY` – Key für Emotionserkennung
+- `ELEVENLABS_API_KEY` – Key für TTS
+- `VOICE_PORT` – Port des WebSocket-Servers (Default `8080`)
+
+### Endpunkt
+
+`ws://localhost:8080/speak` – erwartet JSON `{"agent": "imerion", "text": "Hallo"}` und
+streamt WAV/PCM-Audio zurück.
+
+Beispiel:
+
+```bash
+curl -X POST ws://localhost:8080/speak -d '{"agent":"imerion","text":"Hallo"}'
+```
