@@ -67,3 +67,28 @@ Beispiel:
 ```bash
 curl -X POST ws://localhost:8080/speak -d '{"agent":"imerion","text":"Hallo"}'
 ```
+
+## Onboarding The Hive
+
+Die Integration des Hive-Agenten erfolgt über ein erweitertes Bootstrap:
+
+1. SKK-Scheduler importieren und mit Test-String starten:
+   ```bash
+   echo "[hive_boot] import SKKScheduler …"
+   python3 tools/skk/skk_autoanalyse_scheduler.py Boot-Test
+   ```
+2. MIND-Cleanup-Setup im Trockenlauf testen:
+   ```bash
+   python3 tools/hive_cleanup_setup.py --dry-run
+   ```
+3. Benötigte Ordner sicherstellen (`tools/skk/`, `SKK_OUT/`, `config/markers`, `semnet/`,
+   `modules/`, `thoughts/`, `wiki/`, `blob/`, `logs/`).
+4. Cronjob für den Hive-Scheduler eintragen:
+   ```bash
+   0 0 * * * python3 tools/skk/skk_autoanalyse_scheduler.py --daily
+   ```
+5. Hive-Resonanz mit einem einfachen API-Call testen:
+   ```bash
+   curl -X POST http://localhost:8000/task -d '{"agent":"hive_regulator","body":"Test Hive-Resonanz"}'
+   ```
+6. Optional übernimmt `./hive_quick_setup.sh` alle obigen Schritte in einem Rutsch.
