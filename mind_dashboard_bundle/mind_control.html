@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mind Control Hub</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Mind Control Hub</h1>
+  <button id="settingsBtn">⚙️</button>
+  <input id="search" placeholder="Suche..." />
+  <div id="groups"></div>
+
+  <h2>Aktive Agenten</h2>
+  <div id="agents"></div>
+
+  <div id="logDrawer" class="hidden">
+    <button id="closeLogs">Schließen</button>
+    <pre id="logs"></pre>
+  </div>
+
+  <div id="modal" class="hidden">
+    <form id="anchorForm">
+      <label>ID <input id="gpt_id" required></label>
+      <label>Name <input id="identity" required></label>
+      <label>Model
+        <select id="model">
+          <option value="gpt-4o">gpt-4o</option>
+          <option value="claude-3">claude-3</option>
+          <option value="gemini-pro">gemini-pro</option>
+        </select>
+      </label>
+      <label>Version <input id="version" value="1.0.0"></label>
+      <button type="submit">Save</button>
+      <button type="button" id="cancelBtn">Cancel</button>
+    </form>
+  </div>
+
+  <div id="settingsPanel" class="hidden">
+    <h3>API-Keys</h3>
+    <input type="file" id="envFile" />
+    <form id="kvForm">
+      <input id="keyName" placeholder="Key" required />
+      <input id="keyValue" placeholder="Value" required />
+      <button type="submit">Save</button>
+    </form>
+    <ul id="secretList"></ul>
+    <button id="closeSettings">Close</button>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

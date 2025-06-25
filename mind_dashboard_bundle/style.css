@@ -1,7 +1,9 @@
 body{font-family:Arial, sans-serif;padding:1rem;}
-table{border-collapse:collapse;width:100%;margin-top:1rem;}
-th,td{border:1px solid #ccc;padding:0.5rem;text-align:left;}
-#modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;}
+section{border:1px solid #ccc;margin-bottom:1rem;padding:0.5rem;}
+.function{display:flex;align-items:center;gap:0.5rem;margin:0.25rem 0;}
+.pill{display:inline-block;width:10px;height:10px;border-radius:50%;}
+#logDrawer{position:fixed;bottom:0;left:0;right:0;height:200px;background:#000;color:#0f0;padding:0.5rem;overflow:auto;}
 .hidden{display:none;}
 .badge.online{color:green;}
 .badge.offline{color:red;}
+#settingsPanel{position:fixed;top:20px;right:20px;background:#fff;border:1px solid #ccc;padding:1rem;max-width:300px;}

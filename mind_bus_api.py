@@ -4,10 +4,17 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+import asyncio
+import subprocess
+from fastapi import (
+    FastAPI, HTTPException, WebSocket, WebSocketDisconnect, BackgroundTasks,
+    UploadFile, File, Depends, Request
+)
 from fastapi.responses import PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, constr, root_validator, validator
+from token_registry import generate_env_files
+import secret_store
 
 app = FastAPI(openapi_tags=[
     {"name": "anchor", "x-openai-isConsequential": True},
@@ -17,6 +24,66 @@ app = FastAPI(openapi_tags=[
 # in-memory anchor storage
 anchors: Dict[str, Dict] = {}
 update_clients: List[WebSocket] = []
+
+# runtime management for functions
+processes: Dict[str, asyncio.subprocess.Process] = {}
+log_queues: Dict[str, asyncio.Queue] = {}
+
+# simple role check using custom header
+def require_role(role: str):
+    def wrapper(request: Request):
+        header = request.headers.get("X-Role", "")
+        roles = [r.strip() for r in header.split(',') if r.strip()]
+        if role not in roles:
+            raise HTTPException(status_code=403, detail="forbidden")
+    return Depends(wrapper)
+
+# audit log
+secret_events = Path(__file__).resolve().with_name('secret_events.log')
+
+def broadcast_key_update(key: str, value: str) -> None:
+    os.environ[key] = value
+    generate_env_files(list(anchors.keys()))
+    secret_events.open('a').write(f"{datetime.utcnow().isoformat()} update {key}\n")
+
+# parse function map markdown
+def load_function_map() -> List[Dict]:
+    path = Path(__file__).resolve().parent / "MIND_FUNCTION_MAP.md"
+    entries = []
+    current_group = None
+    current = None
+    if not path.exists():
+        return entries
+    for raw in path.read_text().splitlines():
+        line = raw.strip()
+        m = re.match(r"^## Gruppe: (.+)", line)
+        if m:
+            current_group = m.group(1)
+            continue
+        m = re.match(r"^### Datei: (.+)", line)
+        if m:
+            current = {
+                "name": m.group(1),
+                "group": current_group or "Misc",
+                "description": "",
+                "env_missing": [],
+            }
+            entries.append(current)
+            continue
+        m = re.match(r"^Funktionen?: (.+)", line)
+        if m and current:
+            current["description"] = m.group(1)
+            continue
+        m = re.match(r"^Status: (.+)", line)
+        if m and current:
+            status = m.group(1)
+            if "benötigt" in status:
+                req = status.split("benötigt", 1)[1]
+                vars = re.split(r"und|,", req)
+                current["env_missing"] = [v.strip() for v in vars if v.strip()]
+    return entries
+
+function_map = load_function_map()
 
 bundle_dir = Path(__file__).resolve().parent / "mind_dashboard_bundle"
 app.mount("/dashboard", StaticFiles(directory=str(bundle_dir), html=True), name="dashboard")
@@ -137,6 +204,147 @@ async def agent_action(gpt_id: str, payload: AgentAction):
         await broadcast_update("anchor-deleted", gpt_id)
         return {"status": "deleted"}
     raise HTTPException(status_code=400, detail="invalid op")
+
+
+# --- Function control API ---
+
+def build_cmd(name: str) -> List[str]:
+    if name.endswith('.sh'):
+        return ['bash', name]
+    if name.endswith('.js'):
+        return ['node', name]
+    if name.endswith('.py'):
+        return ['python3', name]
+    raise HTTPException(status_code=400, detail='unknown file type')
+
+
+@app.get("/functions")
+async def get_functions():
+    results = []
+    for entry in function_map:
+        status = 'stopped'
+        proc = processes.get(entry['name'])
+        if proc and proc.returncode is None:
+            status = 'running'
+        results.append({
+            **entry,
+            'runtime_status': status,
+        })
+    return results
+
+
+@app.post("/functions/{name}/start")
+async def start_function(name: str, tasks: BackgroundTasks):
+    entry = next((e for e in function_map if e['name'] == name), None)
+    if not entry:
+        raise HTTPException(status_code=404, detail='not found')
+    if name in processes and processes[name].returncode is None:
+        raise HTTPException(status_code=400, detail='already running')
+
+    cmd = build_cmd(name)
+    queue: asyncio.Queue = asyncio.Queue()
+    log_queues[name] = queue
+
+    async def run():
+        proc = await asyncio.create_subprocess_exec(*cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT)
+        processes[name] = proc
+        async for line in proc.stdout:
+            await queue.put(line.decode().rstrip())
+        await proc.wait()
+        await queue.put(None)
+
+    tasks.add_task(run)
+    return {"status": "started"}
+
+
+@app.websocket("/ws/logs/{name}")
+async def ws_logs(ws: WebSocket, name: str):
+    await ws.accept()
+    queue = log_queues.get(name)
+    if queue is None:
+        await ws.close()
+        return
+    try:
+        while True:
+            line = await queue.get()
+            if line is None:
+                await ws.close()
+                break
+            await ws.send_text(line)
+    except WebSocketDisconnect:
+        pass
+
+
+@app.get('/env')
+async def env_status():
+    out: Dict[str, List[str]] = {}
+    for entry in function_map:
+        missing = []
+        for var in entry['env_missing']:
+            if var and not os.environ.get(var):
+                missing.append(var)
+        if missing:
+            out[entry['name']] = missing
+    return out
+
+
+@app.post('/secrets/upload')
+async def upload_secret(request: Request, role: None = require_role('secrets.edit')):
+    stored = []
+    masked = {}
+    ctype = request.headers.get('content-type','')
+    if 'application/json' in ctype:
+        data = await request.json()
+        k = data['key']; v = data['value']
+        secret_store.set_secret(k, v)
+        broadcast_key_update(k, v)
+        stored.append(k)
+        masked[k] = secret_store.mask(v)
+    elif 'multipart/form-data' in ctype:
+        body = await request.body()
+        for line in body.decode().splitlines():
+            if '=' in line:
+                k,v=line.split('=',1)
+                k=k.strip(); v=v.strip()
+                secret_store.set_secret(k,v)
+                broadcast_key_update(k,v)
+                stored.append(k)
+                masked[k]=secret_store.mask(v)
+    else:
+        raise HTTPException(status_code=400, detail='bad content type')
+    return {"stored": stored, "masked": masked}
+
+
+@app.get('/secrets')
+async def list_secrets(role: None = require_role('secrets.edit')):
+    out = []
+    for k, info in secret_store.get_secrets().items():
+        val = secret_store.get_value(k) or ''
+        out.append({
+            'key': k,
+            'masked': secret_store.mask(val),
+            'updated_at': info.get('updated_at')
+        })
+    return out
+
+
+@app.patch('/secrets/{key}')
+async def patch_secret(key: str, data: Dict[str, str], role: None = require_role('secrets.edit')):
+    value = data.get('value')
+    if value is None:
+        raise HTTPException(status_code=400, detail='missing value')
+    secret_store.set_secret(key, value)
+    broadcast_key_update(key, value)
+    return {"key": key, "masked": secret_store.mask(value)}
+
+
+@app.delete('/secrets/{key}')
+async def delete_secret(key: str, role: None = require_role('secrets.edit')):
+    secret_store.delete_secret(key)
+    if os.environ.get(key):
+        del os.environ[key]
+    secret_events.open('a').write(f"{datetime.utcnow().isoformat()} delete {key}\n")
+    return {"status": "deleted"}
 
 def start():
     port = int(os.environ.get("API_PORT") or os.environ.get("PORT", 8000))
