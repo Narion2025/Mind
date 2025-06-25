@@ -55,6 +55,26 @@ Localtunnel bereitgestellt.
 - **`mind_bus_api.py`** – FastAPI-Backend für GPT-Anchors und das Dashboard.
 - **Dashboard** – statische Dateien unter `mind_dashboard_bundle`. Aufruf über `/dashboard`.
 
+## Anchor Actions
+
+Über `POST /agents/{id}/action` lassen sich Anchors verbinden, pausieren oder löschen.
+
+Gültige `op`-Werte:
+
+- `connect` – legt den Anchor an und setzt ihn online
+- `pause` – schaltet den Anchor offline
+- `delete` – entfernt den Anchor
+
+Beispiel:
+
+```bash
+curl -X POST http://localhost:8000/agents/imerion/action \
+  -H 'Content-Type: application/json' \
+  -d '{"op":"connect","model":"gpt-4o","identity":"Imerion","params":{}}'
+```
+
+Alle Aktionen erfolgen per `POST /agents/{id}/action` – es gibt kein `PATCH`.
+
 ## 🔊 Voice Pipeline
 
 Installiere Node.js-Abhängigkeiten und starte anschließend den Voice-Server:

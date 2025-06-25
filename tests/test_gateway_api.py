@@ -42,6 +42,12 @@ def request(method, url, data=None):
         return e.code, e.read().decode()
 
 
+def connect(port, id):
+    payload = {"op": "connect", "model": "gpt-4o", "identity": "Test", "params": {}}
+    code, _ = request('POST', f'http://localhost:{port}/agents/{id}/action', payload)
+    assert code == 200
+
+
 def test_put_anchor_valid(start_api):
     port = start_api
     payload = {"identity": "Test", "model": "gpt-4o", "version": "1.0.0"}
@@ -77,3 +83,30 @@ def test_state_and_list(start_api):
     code, body = request('GET', f'http://localhost:{port}/state?gpt_id=test3')
     assert code == 200
     assert body == 'online'
+
+
+def test_action_connect_invalid_model(start_api):
+    port = start_api
+    payload = {"op": "connect", "model": "wrong", "identity": "X", "params": {}}
+    code, _ = request('POST', f'http://localhost:{port}/agents/a1/action', payload)
+    assert code == 422
+
+
+def test_action_flow(start_api):
+    port = start_api
+    connect(port, 'flow1')
+    code, body = request('GET', f'http://localhost:{port}/anchors')
+    anchors = json.loads(body)
+    a = next(a for a in anchors if a['gpt_id'] == 'flow1')
+    assert a['online'] is True
+    code, _ = request('POST', f'http://localhost:{port}/agents/flow1/action', {"op": "pause"})
+    assert code == 200
+    code, body = request('GET', f'http://localhost:{port}/anchors')
+    anchors = json.loads(body)
+    a = next(a for a in anchors if a['gpt_id'] == 'flow1')
+    assert a['online'] is False
+    code, _ = request('POST', f'http://localhost:{port}/agents/flow1/action', {"op": "delete"})
+    assert code == 200
+    code, body = request('GET', f'http://localhost:{port}/anchors')
+    anchors = json.loads(body)
+    assert not any(x['gpt_id'] == 'flow1' for x in anchors)
