@@ -1,52 +1,68 @@
 import os
-from pathlib import Path
+import re
 from datetime import datetime
+from pathlib import Path
+from typing import Dict, List
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-import yaml
-
-DEFAULT_ANCHOR = Path.home() / 'mind_root'
+from fastapi.responses import PlainTextResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, constr
 
 app = FastAPI()
 
+# in-memory anchor storage
+anchors: Dict[str, Dict] = {}
 
-class Task(BaseModel):
-    title: str
-    body: str
+bundle_dir = Path(__file__).resolve().parent / "mind_dashboard_bundle"
+app.mount("/dashboard", StaticFiles(directory=str(bundle_dir), html=True), name="dashboard")
 
+# Pydantic models
+ModelLiteral = constr(regex="^(gpt-4o|claude-3|gemini-pro)$")
+VersionStr = constr(regex=r"^\d+\.\d+\.\d+$")
+GptID = constr(regex=r"^[a-z0-9_-]{3,32}$")
 
-def get_tasks_dir() -> Path:
-    anchor_env = os.environ.get('MIND_ANCHOR')
-    anchor = Path(anchor_env) if anchor_env else DEFAULT_ANCHOR
-    tasks_dir = anchor / 'MIND' / 'tasks'
-    tasks_dir.mkdir(parents=True, exist_ok=True)
-    return tasks_dir
+class AnchorIn(BaseModel):
+    identity: str
+    model: ModelLiteral
+    version: VersionStr
+    online: bool = True
 
+class Anchor(AnchorIn):
+    gpt_id: GptID
+    created_at: str
 
-@app.post('/task')
-async def create_task(task: Task):
-    tasks_dir = get_tasks_dir()
-    ts = datetime.now().strftime('%Y%m%d%H%M%S')
-    path = tasks_dir / f'{ts}.yaml'
-    try:
-        with open(path, 'w', encoding='utf-8') as f:
-            yaml.dump(task.dict(), f, allow_unicode=True)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    return {'status': 'saved', 'path': str(path)}
+@app.put("/anchors/{gpt_id}")
+async def upsert_anchor(gpt_id: str, anchor: AnchorIn):
+    if not re.match(r"^[a-z0-9_-]{3,32}$", gpt_id):
+        raise HTTPException(status_code=400, detail="bad id")
+    now = datetime.utcnow().isoformat()
+    if gpt_id in anchors:
+        created_at = anchors[gpt_id]["created_at"]
+    else:
+        created_at = now
+    data = Anchor(**anchor.dict(), gpt_id=gpt_id, created_at=created_at).dict()
+    anchors[gpt_id] = data
+    return data
 
+@app.get("/anchors")
+async def list_anchors() -> List[Anchor]:
+    return list(anchors.values())
 
-@app.get('/health')
+@app.get("/state")
+async def get_state(gpt_id: str):
+    if gpt_id not in anchors:
+        raise HTTPException(status_code=404, detail="not found")
+    return PlainTextResponse("online")
+
+@app.get("/health")
 async def health():
-    return 'ok'
-
+    return "ok"
 
 def start():
-    port = int(os.environ.get('PORT', 8000))
+    port = int(os.environ.get("API_PORT") or os.environ.get("PORT", 8000))
     import uvicorn
-    uvicorn.run(app, host='0.0.0.0', port=port)
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     start()
