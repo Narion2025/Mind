@@ -7,7 +7,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Absolute Pfadangabe zum Public-Ordner
-const publicPath = path.join(__dirname, "MIND-Dashboard-Bundle", "public");
+// Serve files from the modern mind_dashboard_bundle directory
+const publicPath = path.join(__dirname, "mind_dashboard_bundle");
 
 const app = express();
 const PORT = process.env.PORT || 8000;
