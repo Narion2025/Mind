@@ -32,6 +32,8 @@ def test_agent_action_e2e():
     proc = subprocess.Popen([sys.executable, 'mind_bus_api.py'], env=env)
     try:
         time.sleep(1.5)
+        if proc.poll() is not None:
+            raise RuntimeError("API server failed to start")
         code, _ = req('POST', f'http://localhost:{port}/agents/e2e/action', {
             'op': 'connect', 'model': 'gpt-4o', 'identity': 'E2E', 'params': {}
         })
