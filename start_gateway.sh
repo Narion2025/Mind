@@ -16,9 +16,11 @@ elif [[ -n $1 ]]; then
   usage
 fi
 
-if lsof -i :$API_PORT -sTCP:LISTEN -t >/dev/null 2>&1; then
-  echo "Error: port $API_PORT is already in use" >&2
-  exit 1
+PIDS=$(lsof -t -i :$API_PORT 2>/dev/null)
+if [[ -n "$PIDS" ]]; then
+  echo "Killing processes on port $API_PORT: $PIDS"
+  kill $PIDS 2>/dev/null || true
+  sleep 1
 fi
 
 export PORT=$API_PORT

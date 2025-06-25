@@ -1,6 +1,18 @@
 #!/bin/bash
 
-ENV_PY="narion-env/bin/python3"
+ENV_PY="${ENV_PY:-narion-env/bin/python3}"
+
+PORT=8000
+PIDS=$(lsof -t -i :$PORT 2>/dev/null)
+if [[ -n "$PIDS" ]]; then
+  echo "Killing processes on port $PORT: $PIDS"
+  kill $PIDS 2>/dev/null || true
+  sleep 1
+fi
+
+echo "Starte Gateway..."
+./mind_gateway.sh &
+sleep 1
 
 echo "Starte Narion Agent..."
 $ENV_PY narion_emotion_loop.py &
