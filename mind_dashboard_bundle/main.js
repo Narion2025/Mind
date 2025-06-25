@@ -1,70 +1,82 @@
 const API_BASE = window.API_BASE || '';
+let functions = [];
 
-async function fetchAnchors() {
-  const res = await fetch(`${API_BASE}/anchors`);
-  if (!res.ok) return;
-  const data = await res.json();
-  const tbody = document.querySelector('#anchors tbody');
-  tbody.innerHTML = '';
-  data.forEach(a => {
-    const tr = document.createElement('tr');
-    const status = a.online ? 'online' : 'offline';
-    tr.innerHTML = `<td>${a.gpt_id}</td><td>${a.identity}</td><td>${a.model}</td><td><span class="badge ${status}">${status}</span></td><td><button class="pauseBtn" data-id="${a.gpt_id}">Pause</button> <button class="deleteBtn" data-id="${a.gpt_id}">Delete</button></td>`;
-    tbody.appendChild(tr);
+async function loadFunctions(){
+  const res = await fetch(`${API_BASE}/functions`);
+  if(!res.ok) return;
+  functions = await res.json();
+  renderFunctions();
+}
+
+function renderFunctions(){
+  const term = document.getElementById('search').value.toLowerCase();
+  const groups = {};
+  functions.forEach(fn=>{
+    if(term && !fn.name.toLowerCase().includes(term) && !fn.group.toLowerCase().includes(term)) return;
+    if(!groups[fn.group]) groups[fn.group] = [];
+    groups[fn.group].push(fn);
+  });
+  const container = document.getElementById('groups');
+  container.innerHTML = '';
+  Object.entries(groups).forEach(([group,fns])=>{
+    const sec = document.createElement('section');
+    const h = document.createElement('h3');
+    h.textContent = group;
+    sec.appendChild(h);
+    fns.forEach(fn=>{
+      const div = document.createElement('div');
+      div.className = 'function';
+      const color = fn.runtime_status==='running' ? 'green' : (fn.env_missing.length?'orange':'gray');
+      div.innerHTML = `<span class="label">${fn.name}</span>
+        <span class="pill" style="background:${color}"></span>
+        <button class="startBtn" data-name="${fn.name}" ${fn.env_missing.length?'disabled':''}>▶</button>
+        <button class="logBtn" data-name="${fn.name}">Logs</button>`;
+      div.title = fn.description + (fn.env_missing.length?`\nMissing: ${fn.env_missing.join(', ')}`:'');
+      sec.appendChild(div);
+    });
+    container.appendChild(sec);
   });
 }
 
-document.getElementById('addBtn').onclick = () => {
-  document.getElementById('modal').classList.remove('hidden');
-};
+document.getElementById('search').oninput = renderFunctions;
 
-document.getElementById('cancelBtn').onclick = () => {
-  document.getElementById('modal').classList.add('hidden');
-};
-
-document.getElementById('anchorForm').onsubmit = async (e) => {
-  e.preventDefault();
-  const id = document.getElementById('gpt_id').value;
-  const payload = {
-    op: 'connect',
-    identity: document.getElementById('identity').value,
-    model: document.getElementById('model').value,
-    params: {}
-  };
-  const res = await fetch(`${API_BASE}/agents/${id}/action`, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(payload)
-  });
-  if (res.ok) {
-    document.getElementById('modal').classList.add('hidden');
-    fetchAnchors();
-  } else {
-    alert('Fehler');
+document.addEventListener('click', async e=>{
+  if(e.target.classList.contains('startBtn')){
+    const name = e.target.dataset.name;
+    await fetch(`${API_BASE}/functions/${encodeURIComponent(name)}/start`,{method:'POST'});
+    loadFunctions();
   }
-};
-
-fetchAnchors();
-setInterval(fetchAnchors, 5000);
-
-document.addEventListener('click', async (e) => {
-  if (e.target.classList.contains('pauseBtn')) {
-    const id = e.target.dataset.id;
-    await fetch(`${API_BASE}/agents/${id}/action`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({op: 'pause'})
-    });
-    fetchAnchors();
-  }
-  if (e.target.classList.contains('deleteBtn')) {
-    const id = e.target.dataset.id;
-    if (!confirm('Delete Agent?')) return;
-    await fetch(`${API_BASE}/agents/${id}/action`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({op: 'delete'})
-    });
-    fetchAnchors();
+  if(e.target.classList.contains('logBtn')){
+    openLogs(e.target.dataset.name);
   }
 });
+
+function openLogs(name){
+  const drawer=document.getElementById('logDrawer');
+  drawer.classList.remove('hidden');
+  const pre=document.getElementById('logs');
+  pre.textContent='';
+  const proto=location.protocol==='https:'?'wss':'ws';
+  const ws=new WebSocket(`${proto}://${location.host}/ws/logs/${encodeURIComponent(name)}`);
+  ws.onmessage=e=>{pre.textContent+=e.data+'\n';pre.scrollTop=pre.scrollHeight;};
+  document.getElementById('closeLogs').onclick=()=>{ws.close();drawer.classList.add('hidden');};
+}
+
+// Anchor logic from legacy dashboard
+async function fetchAnchors(){
+  const res=await fetch(`${API_BASE}/anchors`);
+  if(!res.ok) return;
+  const data=await res.json();
+  const container=document.getElementById('agents');
+  container.innerHTML='';
+  data.forEach(a=>{
+    const div=document.createElement('div');
+    const status=a.online?'online':'offline';
+    div.innerHTML=`<span>${a.gpt_id} (${a.model})</span> <span class="badge ${status}">${status}</span>`;
+    container.appendChild(div);
+  });
+}
+
+loadFunctions();
+fetchAnchors();
+setInterval(()=>{loadFunctions();fetchAnchors();},5000);

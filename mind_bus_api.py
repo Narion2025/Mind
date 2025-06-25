@@ -4,7 +4,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+import asyncio
+import subprocess
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, BackgroundTasks
 from fastapi.responses import PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, constr, root_validator, validator
@@ -17,6 +19,49 @@ app = FastAPI(openapi_tags=[
 # in-memory anchor storage
 anchors: Dict[str, Dict] = {}
 update_clients: List[WebSocket] = []
+
+# runtime management for functions
+processes: Dict[str, asyncio.subprocess.Process] = {}
+log_queues: Dict[str, asyncio.Queue] = {}
+
+# parse function map markdown
+def load_function_map() -> List[Dict]:
+    path = Path(__file__).resolve().parent / "MIND_FUNCTION_MAP.md"
+    entries = []
+    current_group = None
+    current = None
+    if not path.exists():
+        return entries
+    for raw in path.read_text().splitlines():
+        line = raw.strip()
+        m = re.match(r"^## Gruppe: (.+)", line)
+        if m:
+            current_group = m.group(1)
+            continue
+        m = re.match(r"^### Datei: (.+)", line)
+        if m:
+            current = {
+                "name": m.group(1),
+                "group": current_group or "Misc",
+                "description": "",
+                "env_missing": [],
+            }
+            entries.append(current)
+            continue
+        m = re.match(r"^Funktionen?: (.+)", line)
+        if m and current:
+            current["description"] = m.group(1)
+            continue
+        m = re.match(r"^Status: (.+)", line)
+        if m and current:
+            status = m.group(1)
+            if "benötigt" in status:
+                req = status.split("benötigt", 1)[1]
+                vars = re.split(r"und|,", req)
+                current["env_missing"] = [v.strip() for v in vars if v.strip()]
+    return entries
+
+function_map = load_function_map()
 
 bundle_dir = Path(__file__).resolve().parent / "mind_dashboard_bundle"
 app.mount("/dashboard", StaticFiles(directory=str(bundle_dir), html=True), name="dashboard")
@@ -137,6 +182,88 @@ async def agent_action(gpt_id: str, payload: AgentAction):
         await broadcast_update("anchor-deleted", gpt_id)
         return {"status": "deleted"}
     raise HTTPException(status_code=400, detail="invalid op")
+
+
+# --- Function control API ---
+
+def build_cmd(name: str) -> List[str]:
+    if name.endswith('.sh'):
+        return ['bash', name]
+    if name.endswith('.js'):
+        return ['node', name]
+    if name.endswith('.py'):
+        return ['python3', name]
+    raise HTTPException(status_code=400, detail='unknown file type')
+
+
+@app.get("/functions")
+async def get_functions():
+    results = []
+    for entry in function_map:
+        status = 'stopped'
+        proc = processes.get(entry['name'])
+        if proc and proc.returncode is None:
+            status = 'running'
+        results.append({
+            **entry,
+            'runtime_status': status,
+        })
+    return results
+
+
+@app.post("/functions/{name}/start")
+async def start_function(name: str, tasks: BackgroundTasks):
+    entry = next((e for e in function_map if e['name'] == name), None)
+    if not entry:
+        raise HTTPException(status_code=404, detail='not found')
+    if name in processes and processes[name].returncode is None:
+        raise HTTPException(status_code=400, detail='already running')
+
+    cmd = build_cmd(name)
+    queue: asyncio.Queue = asyncio.Queue()
+    log_queues[name] = queue
+
+    async def run():
+        proc = await asyncio.create_subprocess_exec(*cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT)
+        processes[name] = proc
+        async for line in proc.stdout:
+            await queue.put(line.decode().rstrip())
+        await proc.wait()
+        await queue.put(None)
+
+    tasks.add_task(run)
+    return {"status": "started"}
+
+
+@app.websocket("/ws/logs/{name}")
+async def ws_logs(ws: WebSocket, name: str):
+    await ws.accept()
+    queue = log_queues.get(name)
+    if queue is None:
+        await ws.close()
+        return
+    try:
+        while True:
+            line = await queue.get()
+            if line is None:
+                await ws.close()
+                break
+            await ws.send_text(line)
+    except WebSocketDisconnect:
+        pass
+
+
+@app.get('/env')
+async def env_status():
+    out: Dict[str, List[str]] = {}
+    for entry in function_map:
+        missing = []
+        for var in entry['env_missing']:
+            if var and not os.environ.get(var):
+                missing.append(var)
+        if missing:
+            out[entry['name']] = missing
+    return out
 
 def start():
     port = int(os.environ.get("API_PORT") or os.environ.get("PORT", 8000))
