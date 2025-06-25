@@ -5,6 +5,8 @@ websocket-client>=1.6.1
 requests>=2.31.0
 python-dotenv>=1.0.0
 playsound==1.2.2
-fastapi
+fastapi==0.110.0
+PyJWT
+PyYAML
 uvicorn[standard]
 websockets>=11.0

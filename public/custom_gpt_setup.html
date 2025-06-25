@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Custom GPT Setup</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 2rem;
+      }
+      form {
+        margin-bottom: 1rem;
+      }
+      input {
+        padding: 0.5rem;
+        margin-right: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Agenten hinzufügen</h1>
+    <form id="add-agent-form">
+      <input type="text" id="gptId" placeholder="GPT-ID" required />
+      <button type="submit">Ankerpunkt erstellen</button>
+    </form>
+    <div id="message"></div>
+    <script>
+      const form = document.getElementById('add-agent-form');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const gptId = document.getElementById('gptId').value.trim();
+        if (!gptId) return;
+        const res = await fetch(`/anchors/${gptId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ gpt_id: gptId })
+        });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          document.getElementById('message').textContent = 'Ankerpunkt aktualisiert';
+        } else {
+          document.getElementById('message').textContent = 'Fehler beim Erstellen';
+        }
+      });
+    </script>
+  </body>
+</html>

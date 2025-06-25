@@ -1,0 +1,121 @@
+openapi: 3.1.0
+info:
+  title: Mind Custom GPT Manager
+  description: Verbindung externer GPT-Agenten über Anchor-Files
+  version: 1.0.0
+servers:
+  - url: https://wirklichkeits-api.onrender.com
+paths:
+  /anchors/{gpt_id}:
+    put:
+      operationId: createAnchor
+      summary: Legt einen neuen GPT-Anker an
+      parameters:
+        - in: path
+          name: gpt_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnchorV1'
+      responses:
+        '200':
+          description: Erfolg
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+    get:
+      operationId: getAnchor
+      summary: Holt einen gespeicherten GPT-Anker
+      parameters:
+        - in: path
+          name: gpt_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: YAML
+          content:
+            application/yaml:
+              schema:
+                type: string
+    patch:
+      operationId: patchAnchor
+      summary: Aktualisiert Teile eines GPT-Ankers
+      parameters:
+        - in: path
+          name: gpt_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnchorV1'
+      responses:
+        '200':
+          description: Erfolg
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+  /state:
+    get:
+      operationId: getState
+      summary: Liefert Health-Informationen des Dienstes
+      responses:
+        '200':
+          description: Status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  lastChange:
+                    type: string
+  /ws/state:
+    get:
+      operationId: wsState
+      summary: WebSocket für Statusupdates
+      responses:
+        '101':
+          description: Switching Protocols
+components:
+  schemas:
+    AnchorV1:
+      type: object
+      properties:
+        gpt_id:
+          type: string
+        version:
+          type: string
+        identity:
+          type: string
+        priority:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        permissions:
+          type: array
+          items:
+            type: string
+      required:
+        - gpt_id
+      additionalProperties: false
