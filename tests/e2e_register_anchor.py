@@ -32,6 +32,8 @@ def test_register_anchor_e2e():
     proc = subprocess.Popen([sys.executable, 'mind_bus_api.py'], env=env)
     try:
         time.sleep(1.5)
+        if proc.poll() is not None:
+            raise RuntimeError("API server failed to start")
         payload = {'identity': 'E2E', 'model': 'gpt-4o', 'version': '1.0.0'}
         code, _ = req('PUT', f'http://localhost:{port}/anchors/e2e', payload)
         assert code == 200

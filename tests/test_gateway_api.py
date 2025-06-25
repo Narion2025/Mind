@@ -24,6 +24,9 @@ def start_api():
     env['API_PORT'] = str(port)
     proc = subprocess.Popen([sys.executable, 'mind_bus_api.py'], env=env)
     time.sleep(1.0)
+    # Fail fast if the server crashed during startup
+    if proc.poll() is not None:
+        raise RuntimeError("API server failed to start")
     yield port
     proc.terminate()
     proc.wait()

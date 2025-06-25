@@ -67,9 +67,15 @@ bundle_dir = Path(__file__).resolve().parent / "mind_dashboard_bundle"
 app.mount("/dashboard", StaticFiles(directory=str(bundle_dir), html=True), name="dashboard")
 
 # Pydantic models
-ModelLiteral = constr(regex="^(gpt-4o|claude-3|gemini-pro)$")
-VersionStr = constr(regex=r"^\d+\.\d+\.\d+$")
-GptID = constr(regex=r"^[a-z0-9_-]{3,32}$")
+# ``constr`` changed the ``regex`` parameter name to ``pattern`` in
+# pydantic v2. Detect the installed version and use the appropriate
+# keyword so the API works under both v1 and v2.
+import pydantic
+
+_constr_kw = 'pattern' if pydantic.version.VERSION.startswith('2') else 'regex'
+ModelLiteral = constr(**{_constr_kw: "^(gpt-4o|claude-3|gemini-pro)$"})
+VersionStr = constr(**{_constr_kw: r"^\d+\.\d+\.\d+$"})
+GptID = constr(**{_constr_kw: r"^[a-z0-9_-]{3,32}$"})
 
 class AnchorIn(BaseModel):
     identity: str
