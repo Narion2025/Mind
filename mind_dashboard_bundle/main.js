@@ -63,11 +63,34 @@ function openLogs(name){
   document.getElementById('closeLogs').onclick=()=>{ws.close();drawer.classList.add('hidden');};
 }
 
-// Settings panel
+// Anchor logic from legacy dashboard
+async function fetchAnchors(){
+  const res=await fetch(`${API_BASE}/anchors`);
+  if(!res.ok) return;
+  const data=await res.json();
+  const container=document.getElementById('agents');
+  container.innerHTML='';
+  data.forEach(a=>{
+    const div=document.createElement('div');
+    const status=a.online?'online':'offline';
+    div.innerHTML=`<span>${a.gpt_id} (${a.model})</span> <span class="badge ${status}">${status}</span>`;
+    container.appendChild(div);
+  });
+}
+
+loadFunctions();
+fetchAnchors();
+setInterval(()=>{loadFunctions();fetchAnchors();},5000);
+
+// secret management
 async function loadSecrets(){
   const res = await fetch(`${API_BASE}/secrets`, {headers:{'X-Role':'secrets.edit'}});
   if(!res.ok) return;
   secrets = await res.json();
+  renderSecrets();
+}
+
+function renderSecrets(){
   const list = document.getElementById('secretList');
   list.innerHTML='';
   secrets.forEach(s=>{
@@ -120,22 +143,3 @@ document.getElementById('secretList').addEventListener('click',async e=>{
     loadSecrets();
   }
 });
-
-// Anchor logic from legacy dashboard
-async function fetchAnchors(){
-  const res=await fetch(`${API_BASE}/anchors`);
-  if(!res.ok) return;
-  const data=await res.json();
-  const container=document.getElementById('agents');
-  container.innerHTML='';
-  data.forEach(a=>{
-    const div=document.createElement('div');
-    const status=a.online?'online':'offline';
-    div.innerHTML=`<span>${a.gpt_id} (${a.model})</span> <span class="badge ${status}">${status}</span>`;
-    container.appendChild(div);
-  });
-}
-
-loadFunctions();
-fetchAnchors();
-setInterval(()=>{loadFunctions();fetchAnchors();},5000);

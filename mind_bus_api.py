@@ -7,8 +7,8 @@ from typing import Dict, List, Optional
 import asyncio
 import subprocess
 from fastapi import (
-    FastAPI, HTTPException, WebSocket, WebSocketDisconnect, BackgroundTasks,
-    UploadFile, File, Depends, Request
+    FastAPI, HTTPException, WebSocket, WebSocketDisconnect,
+    BackgroundTasks, UploadFile, File, Depends, Request
 )
 from fastapi.responses import PlainTextResponse
 from fastapi.staticfiles import StaticFiles
@@ -32,13 +32,13 @@ log_queues: Dict[str, asyncio.Queue] = {}
 # simple role check using custom header
 def require_role(role: str):
     def wrapper(request: Request):
-        header = request.headers.get("X-Role", "")
+        header = request.headers.get('X-Role', '')
         roles = [r.strip() for r in header.split(',') if r.strip()]
         if role not in roles:
-            raise HTTPException(status_code=403, detail="forbidden")
+            raise HTTPException(status_code=403, detail='forbidden')
     return Depends(wrapper)
 
-# audit log
+# audit log file for secret events
 secret_events = Path(__file__).resolve().with_name('secret_events.log')
 
 def broadcast_key_update(key: str, value: str) -> None:
@@ -292,50 +292,50 @@ async def env_status():
 async def upload_secret(request: Request, role: None = require_role('secrets.edit')):
     stored = []
     masked = {}
-    ctype = request.headers.get('content-type','')
+    ctype = request.headers.get('content-type', '')
     if 'application/json' in ctype:
         data = await request.json()
-        k = data['key']; v = data['value']
-        secret_store.set_secret(k, v)
-        broadcast_key_update(k, v)
-        stored.append(k)
-        masked[k] = secret_store.mask(v)
-    elif 'multipart/form-data' in ctype:
-        body = await request.body()
-        for line in body.decode().splitlines():
-            if '=' in line:
-                k,v=line.split('=',1)
-                k=k.strip(); v=v.strip()
-                secret_store.set_secret(k,v)
-                broadcast_key_update(k,v)
-                stored.append(k)
-                masked[k]=secret_store.mask(v)
+        key = data['key']
+        val = data['value']
+        secret_store.set_secret(key, val)
+        broadcast_key_update(key, val)
+        stored.append(key)
+        masked[key] = secret_store.mask(val)
     else:
-        raise HTTPException(status_code=400, detail='bad content type')
-    return {"stored": stored, "masked": masked}
+        form = await request.form()
+        file: UploadFile = form.get('file')
+        if not file:
+            raise HTTPException(status_code=400, detail='file missing')
+        content = await file.read()
+        for line in content.decode().splitlines():
+            if '=' in line:
+                k, v = line.split('=', 1)
+                k = k.strip(); v = v.strip()
+                secret_store.set_secret(k, v)
+                broadcast_key_update(k, v)
+                stored.append(k)
+                masked[k] = secret_store.mask(v)
+    return {'stored': stored, 'masked': masked}
 
 
 @app.get('/secrets')
 async def list_secrets(role: None = require_role('secrets.edit')):
     out = []
-    for k, info in secret_store.get_secrets().items():
+    for k, meta in secret_store.get_all().items():
         val = secret_store.get_value(k) or ''
-        out.append({
-            'key': k,
-            'masked': secret_store.mask(val),
-            'updated_at': info.get('updated_at')
-        })
+        out.append({'key': k, 'masked': secret_store.mask(val), 'updated_at': meta.get('updated_at')})
     return out
 
 
+class SecretUpdate(BaseModel):
+    value: str
+
+
 @app.patch('/secrets/{key}')
-async def patch_secret(key: str, data: Dict[str, str], role: None = require_role('secrets.edit')):
-    value = data.get('value')
-    if value is None:
-        raise HTTPException(status_code=400, detail='missing value')
-    secret_store.set_secret(key, value)
-    broadcast_key_update(key, value)
-    return {"key": key, "masked": secret_store.mask(value)}
+async def patch_secret(key: str, payload: SecretUpdate, role: None = require_role('secrets.edit')):
+    secret_store.set_secret(key, payload.value)
+    broadcast_key_update(key, payload.value)
+    return {'key': key, 'masked': secret_store.mask(payload.value)}
 
 
 @app.delete('/secrets/{key}')
@@ -344,7 +344,7 @@ async def delete_secret(key: str, role: None = require_role('secrets.edit')):
     if os.environ.get(key):
         del os.environ[key]
     secret_events.open('a').write(f"{datetime.utcnow().isoformat()} delete {key}\n")
-    return {"status": "deleted"}
+    return {'status': 'deleted'}
 
 def start():
     port = int(os.environ.get("API_PORT") or os.environ.get("PORT", 8000))

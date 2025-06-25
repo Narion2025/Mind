@@ -24,7 +24,7 @@ def request(method, url, data=None, headers=None):
     if data is not None:
         req.add_header('Content-Type', 'application/json')
     if headers:
-        for k,v in headers.items():
+        for k, v in headers.items():
             req.add_header(k, v)
     try:
         with urllib.request.urlopen(req) as resp:
@@ -48,20 +48,21 @@ def start_api(tmp_path):
 
 def test_secret_crud_flow(start_api):
     port = start_api
-    h = {'X-Role':'secrets.edit'}
+    h = {'X-Role': 'secrets.edit'}
     code, _ = request('POST', f'http://localhost:{port}/secrets/upload',
-                      {'key':'OPENAI_API_KEY','value':'sk-test'}, h)
+                      {'key': 'OPENAI_API_KEY', 'value': 'sk-test'}, h)
     assert code == 200
     code, body = request('GET', f'http://localhost:{port}/secrets', headers=h)
     assert code == 200
     secrets = json.loads(body)
-    assert any(s['key']=='OPENAI_API_KEY' for s in secrets)
+    assert any(s['key'] == 'OPENAI_API_KEY' for s in secrets)
     code, _ = request('PATCH', f'http://localhost:{port}/secrets/OPENAI_API_KEY',
-                      {'value':'sk-new'}, h)
+                      {'value': 'sk-new'}, h)
     assert code == 200
     code, _ = request('DELETE', f'http://localhost:{port}/secrets/OPENAI_API_KEY',
                       headers=h)
     assert code == 200
     code, body = request('GET', f'http://localhost:{port}/secrets', headers=h)
+    assert code == 200
     secrets = json.loads(body)
-    assert not any(s['key']=='OPENAI_API_KEY' for s in secrets)
+    assert not any(s['key'] == 'OPENAI_API_KEY' for s in secrets)

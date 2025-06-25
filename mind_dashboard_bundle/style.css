@@ -6,4 +6,4 @@ section{border:1px solid #ccc;margin-bottom:1rem;padding:0.5rem;}
 .hidden{display:none;}
 .badge.online{color:green;}
 .badge.offline{color:red;}
-#settingsPanel{position:fixed;top:20px;right:20px;background:#fff;border:1px solid #ccc;padding:1rem;max-width:300px;}
+#settingsPanel{position:fixed;top:60px;right:10px;width:260px;background:#f0f0f0;border:1px solid #ccc;padding:0.5rem;}
