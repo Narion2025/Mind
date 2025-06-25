@@ -33,13 +33,33 @@ git clone https://github.com/Narion2025/Mind.git
 cd Mind
 ```
 
-### Quick Start
+### Schnellstart
 
-```bash
-pip install -r requirements.txt
-./start_mind.sh
-curl http://localhost:8000/health
-```
+1. Repository klonen und Abhängigkeiten installieren:
+   ```bash
+   git clone https://github.com/Narion2025/Mind.git
+   cd Mind && pip install -r requirements.txt
+   ```
+2. Optional per Docker Compose starten:
+   ```bash
+   docker-compose up --build
+   ```
+   oder lokal mit Python:
+   ```bash
+   ./start_gateway.sh
+   ```
+3. Im Browser `http://localhost:8000/dashboard` öffnen und neue GPT‑Anchors anlegen.
+
+Mit `./start_gateway.sh --tunnel` wird automatisch ein öffentlicher Link via
+Localtunnel bereitgestellt.
+
+### Skripte
+
+- **`start_gateway.sh`** – prüft den freien Port (Standard `8000`), optional mit `--tunnel` für einen öffentlichen Link. Startet `mind_bus_api.py`.
+- **`mind_bus_api.py`** – FastAPI-Backend für GPT-Anchors und das Dashboard.
+- **Dashboard** – statische Dateien unter `mind_dashboard_bundle`. Aufruf über `/dashboard`.
+- **`docker-compose.yml`** – startet PostgreSQL und das Gateway gemeinsam.
+- **`GET /capabilities`** – listet verfügbare Modell-Treiber.
 
 ## 🔊 Voice Pipeline
 

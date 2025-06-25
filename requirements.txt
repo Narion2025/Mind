@@ -10,3 +10,4 @@ PyJWT
 PyYAML
 uvicorn[standard]
 websockets>=11.0
+sqlmodel>=0.0.16

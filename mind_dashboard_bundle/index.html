@@ -3,12 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MIND Dashboard</title>
+  <title>Gateway Dashboard</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="app"></div>
-  <script src="data.js"></script>
+  <h1>Gateway Dashboard</h1>
+  <button id="addBtn" class="hide-write">Neuen GPT hinzufügen</button>
+  <table id="anchors">
+    <thead><tr><th>ID</th><th>Name</th><th>Model</th><th>Status</th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <div id="modal" class="hidden">
+    <form id="anchorForm">
+      <div class="step step1">
+        <label>Model
+          <select id="model"></select>
+        </label>
+        <button type="button" id="nextBtn">Weiter</button>
+      </div>
+      <div class="step step2 hidden">
+        <label>ID <input id="gpt_id" required></label>
+        <label>Name <input id="identity" required></label>
+        <label>Version <input id="version" value="1.0.0"></label>
+        <button type="submit">Speichern</button>
+        <button type="button" id="cancelBtn">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="detail" class="hidden">
+    <h2 id="detailTitle"></h2>
+    <label>Priorität <input type="range" id="priority" min="1" max="10"></label>
+    <button id="pauseBtn" class="hide-write">Pause</button>
+    <button id="resumeBtn" class="hide-write">Resume</button>
+    <button id="deleteBtn" class="hide-write">Delete</button>
+  </div>
+
   <script src="main.js"></script>
 </body>
 </html>

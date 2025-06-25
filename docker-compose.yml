@@ -1,0 +1,18 @@
+version: '3'
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: mind
+      POSTGRES_PASSWORD: mind
+      POSTGRES_DB: mind
+    ports:
+      - '5432:5432'
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg2://mind:mind@db:5432/mind
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db

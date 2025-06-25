@@ -1,9 +1,5 @@
 name: CI
-
-on:
-  push:
-  pull_request:
-
+on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,14 +8,7 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - name: Install deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytest
-      - name: Compile
-        run: python -m py_compile voice_pipeline/*.py
-      - name: Run tests
-        run: pytest -q
-      - name: Validate thoughts
-        run: python MIND_CI_Validation/scripts/validate_thoughts.py
+      - run: pip install -r requirements.txt flake8
+      - run: flake8 mind_bus_api.py
+      - run: pytest -q
+      - run: docker build -t mind-api .

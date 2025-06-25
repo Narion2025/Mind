@@ -1,24 +1,8 @@
-body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
-  background-color: #f0f4f8;
-  color: #111827;
-}
-#app {
-  padding: 2rem;
-}
-.card {
-  border-radius: 1rem;
-  background: white;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-.card h2 {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-}
-.card p {
-  font-size: 0.875rem;
-  color: #4b5563;
-}
+body{font-family:Arial, sans-serif;padding:1rem;}
+table{border-collapse:collapse;width:100%;margin-top:1rem;}
+th,td{border:1px solid #ccc;padding:0.5rem;text-align:left;}
+#modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;}
+.hidden{display:none;}
+.badge.online{color:green;}
+.hide-write{display:none;}
+#detail{border:1px solid #ccc;padding:1rem;margin-top:1rem;}
