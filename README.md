@@ -54,6 +54,8 @@ Localtunnel bereitgestellt.
 - **`start_gateway.sh`** – prüft den freien Port (Standard `8000`), optional mit `--tunnel` für einen öffentlichen Link. Startet `mind_bus_api.py`.
 - **`mind_bus_api.py`** – FastAPI-Backend für GPT-Anchors und das Dashboard.
 - **Dashboard** – statische Dateien unter `mind_dashboard_bundle`. Aufruf über `/dashboard`.
+- **`mind_init_all.py`** – kleine Tkinter-Oberfläche zum Starten von Server,
+  Gateway und Dashboard. Aufruf: `python3 mind_init_all.py`.
 
 ## Anchor Actions
 
