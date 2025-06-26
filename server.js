@@ -7,10 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Absolute Pfadangabe zum Public-Ordner
-const publicPath = path.join(__dirname, "MIND-Dashboard-Bundle", "public");
+// Die Dateien liegen im Ordner "mind_dashboard_bundle" im Repo
+const publicPath = path.join(__dirname, "mind_dashboard_bundle");
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8001;
 
 // Static Assets bereitstellen
 app.use(express.static(publicPath));
@@ -19,6 +20,6 @@ app.use(express.static(publicPath));
 app.get("*", (_, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
-app.listen(8000, '0.0.0.0', () => {
-  console.log("🧠 Narion MIND Server läuft öffentlich auf Port 8000");
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🧠 Narion MIND Server läuft öffentlich auf Port ${PORT}`);
 });
