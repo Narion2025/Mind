@@ -1,6 +1,12 @@
 #!/bin/bash
 
 ENV_PY="narion-env/bin/python3"
+PORT=${API_PORT:-8000}
+if lsof -i :$PORT -sTCP:LISTEN -t >/dev/null 2>&1; then
+  echo "Killing processes on port $PORT" >&2
+  lsof -ti :$PORT -sTCP:LISTEN | xargs -r kill
+  sleep 1
+fi
 
 echo "Starte Narion Agent..."
 $ENV_PY narion_emotion_loop.py &

@@ -17,8 +17,9 @@ elif [[ -n $1 ]]; then
 fi
 
 if lsof -i :$API_PORT -sTCP:LISTEN -t >/dev/null 2>&1; then
-  echo "Error: port $API_PORT is already in use" >&2
-  exit 1
+  echo "Killing processes on port $API_PORT" >&2
+  lsof -ti :$API_PORT -sTCP:LISTEN | xargs -r kill
+  sleep 1
 fi
 
 export PORT=$API_PORT

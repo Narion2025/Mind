@@ -38,3 +38,13 @@ Unter `/custom_gpt_setup.html` befindet sich ein einfaches Formular. Die Eingabe
 `action/custom_gpt_manager.yaml` beschreibt die API für ChatGPT-Functions. Binden Sie diese Datei ein und rufen Sie `createAnchor` bzw. `patchAnchor` auf, um einen Agenten zu registrieren. Anschließend kann der Agent seine YAML-Dateien für Gedanken, Narrative oder Wissenseinträge ablegen.
 
 Für die Verbindung werden die Umgebungsvariablen `JWT_PUBLIC_KEY` und optional `HMAC_SECRET` benötigt. Ohne gültiges JWT bzw. HMAC lehnt der Gateway die Anfrage ab.
+
+## 5. GPT-Ordner erzeugen
+
+Mit `create_gpt_scaffold.py` kann ein neuer Agent inklusive Anker-Server und YAML-Vorlage angelegt werden:
+
+```bash
+python3 create_gpt_scaffold.py MyGPT --description "Kurzer Archetyp"
+```
+
+Es entsteht der Ordner `MyGPT/` mit `server.js`, `package.json`, `package-lock.json` und `MyGPT.yaml`. Der Express-Server liefert die YAML unter `/init/anchors/MyGPT.yaml` aus.
