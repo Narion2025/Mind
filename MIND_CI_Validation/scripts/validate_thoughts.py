@@ -66,7 +66,9 @@ else:  # pragma: no cover - validation skipped
 
         return
 
-BASE = Path(__file__).resolve().parents[1]
+# ``validate_thoughts.py`` lives in ``MIND_CI_Validation/scripts``.  The project
+# root is two levels up from this file.
+BASE = Path(__file__).resolve().parents[2]
 SCHEMA_PATH = BASE / "MIND_CI_Validation" / "schema" / "thought_entry.schema.yml"
 THOUGHTS_DIR = BASE / "thoughts" / "entries"
 
