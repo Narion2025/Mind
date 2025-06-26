@@ -10,6 +10,7 @@ from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Back
 from fastapi.responses import PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, constr, root_validator, validator
+from agent_manager import create_agent
 
 app = FastAPI(openapi_tags=[
     {"name": "anchor", "x-openai-isConsequential": True},
@@ -110,6 +111,14 @@ class AgentAction(BaseModel):
     class Config:
         extra = 'forbid'
 
+
+class NewAgent(BaseModel):
+    name: constr(**{_constr_kw: r"^[a-zA-Z0-9_-]{1,32}$"})
+    farbe: str
+    fokus: str
+    beschreibung: str
+
+
 @app.put("/anchors/{gpt_id}")
 async def upsert_anchor(gpt_id: str, anchor: AnchorIn):
     if not re.match(r"^[a-z0-9_-]{3,32}$", gpt_id):
@@ -188,6 +197,12 @@ async def agent_action(gpt_id: str, payload: AgentAction):
         await broadcast_update("anchor-deleted", gpt_id)
         return {"status": "deleted"}
     raise HTTPException(status_code=400, detail="invalid op")
+
+
+@app.post('/agents', tags=['agent'])
+async def create_new_agent(agent: NewAgent):
+    create_agent(agent.name, agent.farbe, agent.fokus, agent.beschreibung)
+    return {'status': 'created'}
 
 
 # --- Function control API ---
