@@ -37,3 +37,31 @@ class MarkerSelfwriter:
             }
             with open(path, "w", encoding="utf-8") as f:
                 yaml.safe_dump(data, f, allow_unicode=True)
+
+    def write_marker_from_text(self, text: str) -> None:
+        """Create and store a new marker based on the given text."""
+        template = generate_marker_template(text)
+        name = suggest_marker_name(text)
+        template["marker"] = name
+        path = os.path.join(self.base_dir, f"{name}.yaml")
+        with open(path, "w", encoding="utf-8") as f:
+            yaml.safe_dump({name: template}, f, allow_unicode=True)
+        print(f"Selfwriter: neuer Marker '{name}' gespeichert -> {path}")
+
+
+def generate_marker_template(text: str) -> dict:
+    """Return basic marker YAML structure for unseen text."""
+    return {
+        "marker": "unbenannt",
+        "beschreibung": "Ein m\u00f6glicher blinder Fleck im Gespr\u00e4ch",
+        "examples": [text],
+        "tags": ["drift", "unknown"],
+    }
+
+
+def suggest_marker_name(text: str) -> str:
+    """Heuristically derive a short marker name."""
+    for word in text.split():
+        if word.isalpha():
+            return word.lower()
+    return "marker"
