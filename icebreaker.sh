@@ -19,4 +19,7 @@ sleep 5
 echo "📄 Aktive Tunnel-URL:"
 grep -o 'https://[a-zA-Z0-9.-]*.loca.lt' icebreaker-tunnel.log
 
+# Initiale Prüfung der registrierten GPT-Agenten
+python3 agent_initial_check.py
+
 echo "✅ Icebreaker läuft. MIND ist stabilisiert. Überwachung aktiv."
