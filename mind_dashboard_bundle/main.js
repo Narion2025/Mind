@@ -62,6 +62,24 @@ function openLogs(name){
   document.getElementById('closeLogs').onclick=()=>{ws.close();drawer.classList.add('hidden');};
 }
 
+document.getElementById('openTerminal').onclick = () => {
+  const drawer = document.getElementById('terminalDrawer');
+  drawer.classList.remove('hidden');
+  const pre = document.getElementById('terminalOutput');
+  pre.textContent = '';
+  const input = document.getElementById('terminalInput');
+  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  const ws = new WebSocket(`${proto}://${location.host}/ws/terminal`);
+  ws.onmessage = e => { pre.textContent += e.data; pre.scrollTop = pre.scrollHeight; };
+  input.onkeydown = ev => {
+    if(ev.key === 'Enter'){
+      ws.send(input.value + '\n');
+      input.value = '';
+    }
+  };
+  document.getElementById('closeTerminal').onclick = () => { ws.close(); drawer.classList.add('hidden'); };
+};
+
 // Anchor logic from legacy dashboard
 async function fetchAnchors(){
   const res=await fetch(`${API_BASE}/anchors`);
