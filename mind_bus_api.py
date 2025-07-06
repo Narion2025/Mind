@@ -274,6 +274,46 @@ async def ws_logs(ws: WebSocket, name: str):
         pass
 
 
+@app.websocket("/ws/terminal")
+async def ws_terminal(ws: WebSocket):
+    """Provide a simple interactive shell over WebSocket.
+
+    Access is gated via the ``ENABLE_TERMINAL`` environment variable. If it is
+    not set to ``"1"`` the connection will be closed immediately.
+    """
+    await ws.accept()
+    if os.environ.get("ENABLE_TERMINAL") != "1":
+        await ws.close(code=1008)
+        return
+
+    proc = await asyncio.create_subprocess_exec(
+        "bash", "-i",
+        stdin=asyncio.subprocess.PIPE,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.STDOUT,
+    )
+
+    async def read_stream():
+        while True:
+            data = await proc.stdout.readline()
+            if not data:
+                break
+            await ws.send_text(data.decode())
+
+    reader = asyncio.create_task(read_stream())
+    try:
+        while True:
+            msg = await ws.receive_text()
+            proc.stdin.write(msg.encode())
+            await proc.stdin.drain()
+    except WebSocketDisconnect:
+        pass
+    finally:
+        proc.kill()
+        await proc.wait()
+        reader.cancel()
+
+
 @app.get('/env')
 async def env_status():
     out: Dict[str, List[str]] = {}
