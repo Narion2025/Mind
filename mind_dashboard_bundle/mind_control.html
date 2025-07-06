@@ -8,11 +8,26 @@
 </head>
 <body>
   <h1>Mind Control Hub</h1>
-  <input id="search" placeholder="Suche..." />
-  <div id="groups"></div>
 
-  <h2>Aktive Agenten</h2>
-  <div id="agents"></div>
+  <div id="dashboard">
+    <section class="module" id="functionsSection">
+      <h2>Funktionen</h2>
+      <input id="search" placeholder="Suche..." />
+      <div id="groups"></div>
+    </section>
+
+    <section class="module" id="agentsSection">
+      <h2>Aktive Agenten</h2>
+      <div id="agents"></div>
+      <button id="openTerminal">Terminal</button>
+    </section>
+  </div>
+
+  <div id="terminalDrawer" class="hidden">
+    <button id="closeTerminal">Schließen</button>
+    <pre id="terminalOutput"></pre>
+    <input id="terminalInput" placeholder="Befehl" />
+  </div>
 
   <div id="logDrawer" class="hidden">
     <button id="closeLogs">Schließen</button>
