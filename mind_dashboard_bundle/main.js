@@ -1,8 +1,13 @@
 const API_BASE = window.API_BASE || '';
 let functions = [];
 
+function authHeaders(extra={}){
+  const token = localStorage.getItem('token');
+  return Object.assign({'Authorization': 'Bearer ' + token}, extra);
+}
+
 async function loadFunctions(){
-  const res = await fetch(`${API_BASE}/functions`);
+  const res = await fetch(`${API_BASE}/functions`, {headers: authHeaders()});
   if(!res.ok) return;
   functions = await res.json();
   renderFunctions();
@@ -43,7 +48,7 @@ document.getElementById('search').oninput = renderFunctions;
 document.addEventListener('click', async e=>{
   if(e.target.classList.contains('startBtn')){
     const name = e.target.dataset.name;
-    await fetch(`${API_BASE}/functions/${encodeURIComponent(name)}/start`,{method:'POST'});
+    await fetch(`${API_BASE}/functions/${encodeURIComponent(name)}/start`,{method:'POST',headers:authHeaders()});
     loadFunctions();
   }
   if(e.target.classList.contains('logBtn')){
@@ -82,7 +87,7 @@ document.getElementById('openTerminal').onclick = () => {
 
 // Anchor logic from legacy dashboard
 async function fetchAnchors(){
-  const res=await fetch(`${API_BASE}/anchors`);
+  const res=await fetch(`${API_BASE}/anchors`, {headers: authHeaders()});
   if(!res.ok) return;
   const data=await res.json();
   const container=document.getElementById('agents');

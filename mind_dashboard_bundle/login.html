@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mind Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Login</h1>
+  <form id="loginForm">
+    <label>Nutzer <input id="loginUser" required></label><br>
+    <label>Passwort <input type="password" id="loginPass" required></label><br>
+    <button type="submit">Login</button>
+  </form>
+  <h2>Registrieren</h2>
+  <form id="regForm">
+    <label>Nutzer <input id="regUser" required></label><br>
+    <label>Email <input id="regEmail" required></label><br>
+    <label>Passwort <input type="password" id="regPass" required></label><br>
+    <button type="submit">Registrieren</button>
+  </form>
+  <pre id="status"></pre>
+  <script src="login.js"></script>
+</body>
+</html>
