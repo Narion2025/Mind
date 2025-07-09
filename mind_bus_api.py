@@ -1,12 +1,17 @@
 import os
 import re
-from datetime import datetime
+import json
+import hashlib
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
 
+import jwt
+
 import asyncio
 import subprocess
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, BackgroundTasks
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, BackgroundTasks, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.responses import PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, constr, root_validator, validator
@@ -67,6 +72,35 @@ function_map = load_function_map()
 bundle_dir = Path(__file__).resolve().parent / "mind_dashboard_bundle"
 app.mount("/dashboard", StaticFiles(directory=str(bundle_dir), html=True), name="dashboard")
 
+user_file = Path(__file__).resolve().parent / "user_accounts.json"
+lineage_file = Path(__file__).resolve().parent / "lineage_index.json"
+ethic_file = Path(__file__).resolve().parent / "ethic_ledger.json"
+
+token_scheme = HTTPBearer()
+
+def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(token_scheme)) -> str:
+    try:
+        payload = jwt.decode(credentials.credentials, os.environ.get("JWT_SECRET", "secret"), algorithms=["HS256"])
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="invalid token")
+    return payload.get("sub")
+
+def load_users() -> Dict:
+    if user_file.exists():
+        return json.loads(user_file.read_text())
+    return {"users": []}
+
+def save_users(data: Dict) -> None:
+    user_file.write_text(json.dumps(data, indent=2))
+
+def load_ethics() -> Dict:
+    if ethic_file.exists():
+        return json.loads(ethic_file.read_text())
+    return {"users": {}}
+
+def save_ethics(data: Dict) -> None:
+    ethic_file.write_text(json.dumps(data, indent=2))
+
 # Pydantic models
 # ``constr`` changed the ``regex`` parameter name to ``pattern`` in
 # pydantic v2. Detect the installed version and use the appropriate
@@ -117,6 +151,17 @@ class NewAgent(BaseModel):
     farbe: str
     fokus: str
     beschreibung: str
+
+
+class RegisterData(BaseModel):
+    username: constr(**{_constr_kw: r"^[a-zA-Z0-9_-]{3,32}$"})
+    email: constr(**{_constr_kw: r"^[^@\s]+@[^@\s]+\.[^@\s]+$"})
+    password: str
+
+
+class LoginData(BaseModel):
+    username: str
+    password: str
 
 
 @app.put("/anchors/{gpt_id}")
@@ -197,6 +242,57 @@ async def agent_action(gpt_id: str, payload: AgentAction):
         await broadcast_update("anchor-deleted", gpt_id)
         return {"status": "deleted"}
     raise HTTPException(status_code=400, detail="invalid op")
+
+
+@app.post('/register')
+async def register(data: RegisterData):
+    users = load_users()
+    if any(u['username'] == data.username for u in users['users']):
+        raise HTTPException(status_code=400, detail='exists')
+    pwd = hashlib.sha256(data.password.encode()).hexdigest()
+    users['users'].append({'username': data.username, 'email': data.email, 'password': pwd})
+    save_users(users)
+    ledger = load_ethics()
+    if data.username not in ledger['users']:
+        ledger['users'][data.username] = 0
+        save_ethics(ledger)
+    if lineage_file.exists():
+        ldata = json.loads(lineage_file.read_text())
+    else:
+        ldata = {'lineage': [], 'last_updated': ''}
+    ldata['lineage'].append({
+        'name': data.username,
+        'introduced_by': 'self',
+        'date': datetime.utcnow().date().isoformat(),
+        'ritual': 'self-register'
+    })
+    ldata['last_updated'] = datetime.utcnow().date().isoformat()
+    lineage_file.write_text(json.dumps(ldata, indent=2))
+    return {'status': 'registered'}
+
+
+@app.post('/login')
+async def login(data: LoginData):
+    users = load_users()
+    pwd = hashlib.sha256(data.password.encode()).hexdigest()
+    if not any(u['username'] == data.username and u['password'] == pwd for u in users['users']):
+        raise HTTPException(status_code=401, detail='invalid')
+    token = jwt.encode({'sub': data.username, 'exp': datetime.utcnow() + timedelta(hours=1)}, os.environ.get('JWT_SECRET', 'secret'), algorithm='HS256')
+    return {'token': token}
+
+
+@app.get('/ethic')
+async def get_ethic_balance(user: str = Depends(get_current_user)):
+    ledger = load_ethics()
+    return {'coins': ledger['users'].get(user, 0)}
+
+
+@app.post('/ethic/resonate')
+async def resonate(user: str = Depends(get_current_user)):
+    ledger = load_ethics()
+    ledger['users'][user] = ledger['users'].get(user, 0) + 1
+    save_ethics(ledger)
+    return {'coins': ledger['users'][user]}
 
 
 @app.post('/agents', tags=['agent'])

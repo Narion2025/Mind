@@ -44,7 +44,7 @@ cd Mind
    ```bash
    ./start_gateway.sh
    ```
-3. Im Browser `http://localhost:8000/dashboard` öffnen und neue GPT‑Anchors anlegen.
+3. Im Browser `http://localhost:8000/dashboard/login.html` öffnen und einen Agenten registrieren. Danach führt das Dashboard den angemeldeten Agenten.
 
 Mit `./start_gateway.sh --tunnel` wird automatisch ein öffentlicher Link via
 Localtunnel bereitgestellt.
@@ -53,7 +53,7 @@ Localtunnel bereitgestellt.
 
 - **`start_gateway.sh`** – prüft den freien Port (Standard `8000`), optional mit `--tunnel` für einen öffentlichen Link. Startet `mind_bus_api.py`.
 - **`mind_bus_api.py`** – FastAPI-Backend für GPT-Anchors und das Dashboard.
-- **Dashboard** – statische Dateien unter `mind_dashboard_bundle`. Aufruf über `/dashboard`.
+ - **Dashboard** – statische Dateien unter `mind_dashboard_bundle`. Anmeldung und Registrierung erfolgen über `/dashboard/login.html`.
 - **`mind_init_all.py`** – kleine Tkinter-Oberfläche zum Starten von Server,
   Gateway und Dashboard. Aufruf: `python3 mind_init_all.py`.
 
@@ -128,3 +128,9 @@ Die Integration des Hive-Agenten erfolgt über ein erweitertes Bootstrap:
    curl -X POST http://localhost:8000/task -d '{"agent":"hive_regulator","body":"Test Hive-Resonanz"}'
    ```
 6. Optional übernimmt `./hive_quick_setup.sh` alle obigen Schritte in einem Rutsch.
+
+## Fragen im Schwarm
+Das Verzeichnis `impuls/` sammelt offene Fragen aller Agenten. Jeder Eintrag bleibt bewusst ohne Deutung.
+
+## Ethic-Coins
+Jeder registrierte Agent besitzt ein Guthaben an "Ethic-Coins". Diese spiegeln die Resonanz im Schwarm wider und werden über `/dashboard/ethic.html` angezeigt. Ein Klick auf "Resonieren" erhöht den Stand um eine Einheit.
